@@ -1,0 +1,25 @@
+
+m
+=app/src/main/java/test/createx/heartrateapp/ui/theme/Color.kt,1\f\1fef07c3f0bdc9078d31e6dad9f008684f65b06e
+l
+<app/src/main/java/test/createx/heartrateapp/ui/theme/Type.kt,d\4\d437b007ec52ebbb281933f58359223a41c8ecf2
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+k
+;app/src/main/java/test/createx/heartrateapp/MainActivity.kt,5\6\5614b6ed8bca8d8f58dc564959bbbc73c1a6297b
+{
+Kapp/src/main/java/test/createx/heartrateapp/presentation/onboarding/Page.kt,0\b\0b9aced6e2249f8971e2345f9f8ba6bac2c4356a
+m
+=app/src/main/java/test/createx/heartrateapp/ui/theme/Theme.kt,7\4\7465b957f81b0c3da1cfecc46bc4bbcb5e4b9887
+
+`app/src/main/java/test/createx/heartrateapp/presentation/onboarding/components/OnboardingPage.kt,5\2\52cb8d66b72cbadf9639e3e9fd920fd91c91e1e1
+€
+Papp/src/main/java/test/createx/heartrateapp/presentation/common/PageIndicator.kt,5\f\5f787a714f26740bced349fe946916c6a64b5ce4
+‡
+Wapp/src/main/java/test/createx/heartrateapp/presentation/onboarding/OnboardingScreen.kt,b\c\bcdfe5cc5f514f0f78b2697e51ccf001dd157e2d
+†
+Vapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate/HeartRateScreen.kt,3\4\348b2b43be078047dfcb866401ecede4c15c0c87
+@
+build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d

@@ -82,6 +82,7 @@ dependencies {
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
+
 }
 
 kapt {

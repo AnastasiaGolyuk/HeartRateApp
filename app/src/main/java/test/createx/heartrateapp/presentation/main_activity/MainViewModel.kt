@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.delay
 import test.createx.heartrateapp.data.datastore.UserPreferencesDataStore
 import test.createx.heartrateapp.presentation.navigation.Route
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     userPreferencesDataStore: UserPreferencesDataStore
-): ViewModel() {
+) : ViewModel() {
 
     private val _splashCondition = mutableStateOf(true)
     val splashCondition: State<Boolean> = _splashCondition
@@ -25,12 +25,12 @@ class MainViewModel @Inject constructor(
 
     init {
         userPreferencesDataStore.readAppEntry().onEach { shouldStartFromHomeScreen ->
-            _startDestination.value = if(shouldStartFromHomeScreen){
-                 Route.AppFunctionsNavigation.route
-            }else{
+            _startDestination.value = if (shouldStartFromHomeScreen) {
+                Route.AppFunctionsNavigation.route
+            } else {
                 Route.AppStartNavigation.route
             }
-            delay(200)
+            delay(370)
             _splashCondition.value = false
         }.launchIn(viewModelScope)
     }

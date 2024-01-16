@@ -26,20 +26,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import test.createx.heartrateapp.data.model.Page
 import test.createx.heartrateapp.presentation.common.PageIndicator
+import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding.components.OnboardingPage
+import test.createx.heartrateapp.presentation.onboarding_data.OnboardingEvent
 import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(onEvent: (OnboardingEvent) -> Unit) {
+fun OnboardingScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         val pages = Page.get()
         val pagerState = rememberPagerState(
-            initialPage = 0,
-            initialPageOffsetFraction = 0f
+            initialPage = 0, initialPageOffsetFraction = 0f
         ) {
             pages.size
         }
@@ -77,7 +80,7 @@ fun OnboardingScreen(onEvent: (OnboardingEvent) -> Unit) {
                 onClick = {
                     scope.launch {
                         if (pagerState.currentPage == 1) {
-                            onEvent(OnboardingEvent.OnboardingCompleted)
+                            navController.navigate(Route.PaywallScreen.route)
                         } else {
                             pagerState.animateScrollToPage(
                                 page = pagerState.currentPage + 1
@@ -90,9 +93,7 @@ fun OnboardingScreen(onEvent: (OnboardingEvent) -> Unit) {
                     .padding(bottom = 58.dp)
                     .size(width = 328.dp, height = 48.dp)
                     .shadow(
-                        ambientColor = RedMain,
-                        spotColor = Color(0xFFCC0909),
-                        elevation = 16.dp
+                        ambientColor = RedMain, spotColor = Color(0xFFCC0909), elevation = 16.dp
                     ),
                 colors = ButtonDefaults.elevatedButtonColors(containerColor = RedMain)
             ) {

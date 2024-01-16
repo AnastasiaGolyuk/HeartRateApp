@@ -8,7 +8,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import test.createx.heartrateapp.presentation.heart_rate.HeartRateScreen
 import test.createx.heartrateapp.presentation.onboarding.OnboardingScreen
-import test.createx.heartrateapp.presentation.onboarding.OnboardingViewModel
+import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataScreen
+import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataViewModel
+import test.createx.heartrateapp.presentation.paywall.PaywallScreen
 
 @Composable
 fun NavGraph(
@@ -25,8 +27,14 @@ fun NavGraph(
             startDestination = Route.OnboardingScreen.route
         ) {
             composable(route = Route.OnboardingScreen.route) {
-                val viewModel: OnboardingViewModel = hiltViewModel()
-                OnboardingScreen(onEvent = viewModel::onEvent)
+                OnboardingScreen(navController = navController)
+            }
+            composable(route = Route.PaywallScreen.route) {
+                PaywallScreen(navController = navController)
+            }
+            composable(route = Route.OnboardingDataScreen.route) {
+                val viewModel: OnboardingDataViewModel = hiltViewModel()
+                OnboardingDataScreen(onEvent = viewModel::onEvent)
             }
         }
 

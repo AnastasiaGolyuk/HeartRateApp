@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.onboarding
+package test.createx.heartrateapp.data.model
 
 import androidx.annotation.DrawableRes
 import test.createx.heartrateapp.R

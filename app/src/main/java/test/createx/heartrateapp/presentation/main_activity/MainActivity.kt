@@ -41,6 +41,5 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainPreview() {
     HeartRateAppTheme {
-//        OnboardingScreen()
     }
 }

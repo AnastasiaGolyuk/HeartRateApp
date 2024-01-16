@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.onboarding
+package test.createx.heartrateapp.presentation.onboarding_data
 
 sealed class OnboardingEvent {
 

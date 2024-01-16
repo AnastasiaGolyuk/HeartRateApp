@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.onboarding
+package test.createx.heartrateapp.presentation.onboarding_data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import test.createx.heartrateapp.data.datastore.UserPreferencesDataStore
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
+class OnboardingDataViewModel @Inject constructor(
     private val userPreferencesDataStore: UserPreferencesDataStore
 ) : ViewModel() {
 

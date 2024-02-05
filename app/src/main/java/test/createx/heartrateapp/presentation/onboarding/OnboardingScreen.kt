@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -25,14 +26,18 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import test.createx.heartrateapp.data.model.Page
+import test.createx.heartrateapp.domain.model.Page
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding.components.OnboardingPage
 import test.createx.heartrateapp.presentation.onboarding_data.OnboardingEvent
+import test.createx.heartrateapp.presentation.paywall.PaywallScreen
+import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
 
@@ -89,13 +94,21 @@ fun OnboardingScreen(navController: NavController) {
                     }
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 58.dp)
+                    .padding(bottom = 35.dp)
                     .size(width = 328.dp, height = 48.dp)
                     .shadow(
-                        ambientColor = RedMain, spotColor = Color(0xFFCC0909), elevation = 16.dp
-                    ),
-                colors = ButtonDefaults.elevatedButtonColors(containerColor = RedMain)
+                        elevation = 18.dp,
+                        shape= RoundedCornerShape(50.dp),
+                        clip=true,
+                        ambientColor = Color(0xFFCC0909),
+                        spotColor = Color(0xFFCC0909),
+                    )
+                    .align(Alignment.BottomCenter),
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = RedMain,
+                    disabledContainerColor = RedMain.copy(alpha = 0.5f),
+                    disabledContentColor = RedMain.copy(alpha = 0.5f),
+                )
             ) {
                 Text(
                     text = if (pagerState.currentPage == 0) "Continue" else "Get started",
@@ -104,5 +117,13 @@ fun OnboardingScreen(navController: NavController) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OnboardingPrev() {
+    HeartRateAppTheme {
+        OnboardingScreen(navController = rememberNavController())
     }
 }

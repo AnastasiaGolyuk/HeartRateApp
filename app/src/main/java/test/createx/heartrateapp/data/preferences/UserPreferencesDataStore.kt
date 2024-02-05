@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.data.datastore
+package test.createx.heartrateapp.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore

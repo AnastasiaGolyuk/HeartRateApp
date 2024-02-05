@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import test.createx.heartrateapp.data.datastore.UserPreferencesDataStore
+import test.createx.heartrateapp.data.preferences.UserPreferencesDataStore
 import test.createx.heartrateapp.presentation.navigation.Route
 import javax.inject.Inject
 

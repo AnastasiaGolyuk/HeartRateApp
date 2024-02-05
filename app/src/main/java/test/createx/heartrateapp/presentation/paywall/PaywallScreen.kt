@@ -37,6 +37,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.ui.theme.BlackMain
@@ -178,15 +179,17 @@ fun PaywallScreen(navController: NavController) {
                 }
             }
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(156.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Image(
                     modifier = Modifier.fillMaxWidth(),
                     painter = painterResource(id = R.drawable.paywall_bg),
                     contentDescription = "",
-                    contentScale = ContentScale.FillWidth,
-                    alignment = Alignment.BottomCenter
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.TopCenter
                 )
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -212,16 +215,19 @@ fun PaywallScreen(navController: NavController) {
                             navController.navigate(Route.OnboardingDataScreen.route)
                         },
                         modifier = Modifier
-                            .shadow(
-                                elevation = 16.dp,
-                                spotColor = Color(0xFFCC0909),
-                                ambientColor = RedMain
-                            )
                             .size(width = 328.dp, height = 48.dp)
-                            .background(
-                                color = RedMain, shape = RoundedCornerShape(size = 40.dp)
+                            .shadow(
+                                elevation = 18.dp,
+                                shape = RoundedCornerShape(50.dp),
+                                clip = true,
+                                ambientColor = Color(0xFFCC0909),
+                                spotColor = Color(0xFFCC0909),
                             ),
-                        colors = ButtonDefaults.elevatedButtonColors(containerColor = RedMain)
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = RedMain,
+                            disabledContainerColor = RedMain.copy(alpha = 0.5f),
+                            disabledContentColor = RedMain.copy(alpha = 0.5f),
+                        )
                     ) {
                         Text(
                             text = "Get started",
@@ -266,5 +272,13 @@ fun PaywallScreen(navController: NavController) {
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PaywallPrev() {
+    HeartRateAppTheme {
+        PaywallScreen(navController = rememberNavController())
     }
 }

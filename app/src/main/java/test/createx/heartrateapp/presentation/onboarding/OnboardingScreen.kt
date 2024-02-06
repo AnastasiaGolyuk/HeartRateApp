@@ -35,8 +35,6 @@ import test.createx.heartrateapp.domain.model.Page
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding.components.OnboardingPage
-import test.createx.heartrateapp.presentation.onboarding_data.OnboardingEvent
-import test.createx.heartrateapp.presentation.paywall.PaywallScreen
 import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
@@ -44,15 +42,17 @@ import test.createx.heartrateapp.ui.theme.RedMain
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(navController: NavController) {
+
+    val pages = Page.get()
+    val pagerState = rememberPagerState(
+        initialPage = 0, initialPageOffsetFraction = 0f
+    ) {
+        pages.size
+    }
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+
     Column(modifier = Modifier.fillMaxSize()) {
-        val pages = Page.get()
-        val pagerState = rememberPagerState(
-            initialPage = 0, initialPageOffsetFraction = 0f
-        ) {
-            pages.size
-        }
-        val configuration = LocalConfiguration.current
-        val screenHeight = configuration.screenHeightDp.dp
         Row(
             modifier = Modifier
                 .fillMaxWidth()

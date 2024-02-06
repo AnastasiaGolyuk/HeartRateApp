@@ -1,8 +1,8 @@
 package test.createx.heartrateapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
@@ -35,7 +35,7 @@ fun NavGraph(
             }
             composable(route = Route.OnboardingDataScreen.route) {
                 val viewModel: OnboardingDataViewModel = hiltViewModel()
-                OnboardingDataScreen(viewModel=viewModel)
+                OnboardingDataScreen(viewModel = viewModel)
             }
         }
 
@@ -45,7 +45,7 @@ fun NavGraph(
         ) {
             composable(route = Route.HeartRateScreen.route) {
                 val viewModel: HeartRateViewModel = hiltViewModel()
-                HeartRateScreen(viewModel=viewModel)
+                HeartRateScreen(viewModel = viewModel)
             }
         }
     }

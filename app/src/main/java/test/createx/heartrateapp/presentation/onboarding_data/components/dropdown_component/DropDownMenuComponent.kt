@@ -18,7 +18,15 @@ import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataView
 import test.createx.heartrateapp.ui.theme.White
 
 @Composable
-fun DropDownMenuComponent(screenViewModel: OnboardingDataViewModel) {
+fun DropDownMenuComponent(
+    onUnitsChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
+    onHeightChange: (String) -> Unit,
+    unitsValue:String,
+    weightValue: String,
+    heightValue:String,
+    screenViewModel: OnboardingDataViewModel
+) {
 
     val dropDownMenuState = rememberDropDownMenuState()
     val weightPickerState = rememberPickerState()
@@ -30,28 +38,31 @@ fun DropDownMenuComponent(screenViewModel: OnboardingDataViewModel) {
 
     LaunchedEffect(selectedWeight) {
         if (selectedWeight.isNotEmpty()) {
-            screenViewModel.onWeightChange(selectedWeight)
+            onWeightChange(selectedWeight)
+//            screenViewModel.onWeightChange(selectedWeight)
         }
     }
 
     LaunchedEffect(selectedHeight) {
         if (selectedHeight.isNotEmpty()) {
-            screenViewModel.onHeightChange(selectedHeight)
+            onHeightChange(selectedHeight)
+//            screenViewModel.onHeightChange(selectedHeight)
         }
     }
 
     LaunchedEffect(selectedUnit) {
-
         with(dropDownMenuState) {
-
             if (isUserToggleUnits) {
                 weightPickerState.selectedItem = ""
-                screenViewModel.onWeightChange("")
+                onWeightChange("")
+//                screenViewModel.onWeightChange("")
 
                 heightPickerState.selectedItem = ""
-                screenViewModel.onHeightChange("")
+                onHeightChange("")
+//                screenViewModel.onHeightChange("")
 
-                screenViewModel.onUnitsChange(selectedUnit)
+                onUnitsChange(selectedUnit)
+//                screenViewModel.onUnitsChange(selectedUnit)
             }
             if (isHeightPickerVisible) onToggleHeightVisibility()
             if (isWeightPickerVisible) onToggleWeightVisibility()

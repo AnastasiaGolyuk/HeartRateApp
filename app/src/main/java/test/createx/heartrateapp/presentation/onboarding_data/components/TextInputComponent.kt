@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,35 +27,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
-import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataViewModel
-import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedAction
 import test.createx.heartrateapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun TextInputComponent(screenViewModel: OnboardingDataViewModel) {
+fun TextInputComponent(onInput: (String) -> Unit, text: String) {
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    var text by remember {
-        mutableStateOf(screenViewModel.user.value.name)
-    }
+
     var isError by remember {
         mutableStateOf(false)
-    }
-    LaunchedEffect(text) {
-        isError = if (isValidText(text)) {
-                screenViewModel.onNameChange(text)
-                false
-            } else  {
-                if (text.isNotEmpty()) {
-                    true
-                } else {
-                    screenViewModel.onNameChange(text)
-                    false
-            }
-        }
     }
 
     Column(
@@ -68,7 +51,12 @@ fun TextInputComponent(screenViewModel: OnboardingDataViewModel) {
             placeholder = { Text(text = "Your name") },
             value = text,
             onValueChange = {
-                text = it
+                onInput(it)
+                isError = if (isValidText(it)) {
+                    false
+                } else  {
+                    it.isNotEmpty()
+                }
             },
             trailingIcon = {
                 if (isError) {
@@ -109,7 +97,6 @@ fun TextInputComponent(screenViewModel: OnboardingDataViewModel) {
     }
 }
 
-fun isValidText(text: String): Boolean {
-    return text.matches(Regex("[a-zA-Z]+"))
+private fun isValidText(text: String): Boolean {
+    return text.matches(Regex("[a-zA-Z0-9]+"))
 }
-

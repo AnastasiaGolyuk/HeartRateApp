@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -41,8 +41,8 @@ import test.createx.heartrateapp.domain.model.DataPage
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.onboarding_data.components.OnboardingDataPage
 import test.createx.heartrateapp.presentation.onboarding_data.components.TextInputComponent
-import test.createx.heartrateapp.presentation.onboarding_data.components.ToggleInputComponent
 import test.createx.heartrateapp.presentation.onboarding_data.components.dropdown_component.DropDownMenuComponent
+import test.createx.heartrateapp.presentation.onboarding_data.components.toggle_input_component.ToggleInputComponent
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyBg
 import test.createx.heartrateapp.ui.theme.GreySubText
@@ -53,8 +53,6 @@ import test.createx.heartrateapp.ui.theme.White
 @Composable
 fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
 
-
-
     val pages = DataPage.get()
     val pagerState = rememberPagerState(
         initialPage = 0, initialPageOffsetFraction = 0f
@@ -63,6 +61,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
     LaunchedEffect(pagerState.currentPage) {
         if (pagerState.currentPage != 0) {
             keyboardController?.hide()
@@ -83,27 +82,25 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val scopeBack = rememberCoroutineScope()
-            IconButton(
-                onClick = {
-                    scopeBack.launch {
-                        if (pagerState.currentPage > 0) {
+            if (pagerState.currentPage > 0) {
+                IconButton(
+                    onClick = {
+                        scopeBack.launch {
                             pagerState.animateScrollToPage(
                                 page = pagerState.currentPage - 1
                             )
                         }
-                    }
-                },
-                modifier = if (pagerState.currentPage == 0) {
-                    Modifier.alpha(0f)
-                } else {
-                    Modifier.alpha(1f)
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.return_icon),
+                        contentDescription = "Favorite",
+                        tint = BlackMain
+                    )
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.return_icon),
-                    contentDescription = "Favorite",
-                    tint = BlackMain
-                )
+            }
+            else {
+                Spacer(modifier = Modifier.width(24.dp))
             }
             PageIndicator(pageSize = pages.size, selectedPage = pagerState.currentPage)
             TextButton(onClick = {
@@ -120,9 +117,11 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
         Box {
             HorizontalPager(state = pagerState, userScrollEnabled = false) { index ->
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
                     OnboardingDataPage(dataPage = pages[index])
                     GetInput(index = index, viewModel = viewModel)
                 }
@@ -151,7 +150,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
                         spotColor = Color(0xFFCC0909),
                     )
                     .align(Alignment.BottomCenter),
-                enabled= getEnabledStatus(pagerState.currentPage,viewModel),
+                enabled = getEnabledStatus(pagerState.currentPage, viewModel),
                 colors = ButtonDefaults.elevatedButtonColors(
                     containerColor = RedMain,
                     disabledContainerColor = RedMain.copy(alpha = 0.5f),
@@ -170,21 +169,37 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
 
 
 @Composable
-fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
+private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
     val pronouns = listOf("She / Her", "He / Him", "They / Them")
     val age = listOf("Less than 20", "20-29", "30-39", "40-49", "50-59", "More than 60")
     val lifestyle = listOf("Active", "Moderate", "Sedentary")
+
+    val onClick: (String) -> Unit = { selectedValue ->
+        when (index) {
+            0 -> viewModel.onNameChange(selectedValue)
+            1 -> viewModel.onSexChange(selectedValue)
+            2 -> viewModel.onAgeChange(selectedValue)
+//            3 -> viewModel.onDropDownSelected(selectedValue)
+            4 -> viewModel.onLifestyleChange(selectedValue)
+        }
+    }
     when (index) {
         0 -> {
-            TextInputComponent(viewModel)
+            TextInputComponent(onInput = onClick, text = viewModel.user.value.name)
         }
 
         1 -> {
-            ToggleInputComponent(data = pronouns, dataLabel = "sex", screenViewModel = viewModel)
+            ToggleInputComponent(
+                data = pronouns, onClick = onClick,
+                value = viewModel.user.value.sex
+            )
         }
 
         2 -> {
-            ToggleInputComponent(data = age, dataLabel = "age", screenViewModel = viewModel)
+            ToggleInputComponent(
+                data = age, onClick = onClick,
+                value = viewModel.user.value.age
+            )
         }
 
         3 -> {
@@ -194,14 +209,17 @@ fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
         4 -> {
             ToggleInputComponent(
                 data = lifestyle,
-                dataLabel = "lifestyle",
-                screenViewModel = viewModel
+                onClick = onClick,
+                value = viewModel.user.value.lifestyle,
             )
         }
     }
+
+
 }
 
-fun getEnabledStatus(index: Int, viewModel: OnboardingDataViewModel): Boolean {
+
+private fun getEnabledStatus(index: Int, viewModel: OnboardingDataViewModel): Boolean {
     return when (index) {
         0 -> viewModel.user.value.name.isNotEmpty()
         1 -> viewModel.user.value.sex.isNotEmpty()

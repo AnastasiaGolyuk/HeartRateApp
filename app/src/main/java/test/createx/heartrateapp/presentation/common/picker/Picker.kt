@@ -95,7 +95,10 @@ fun Picker(
                     text = getItem(index),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold, lineHeight = 24.sp),
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        lineHeight = 24.sp
+                    ),
                     color = BlackMain,
                     modifier = Modifier
                         .onSizeChanged { size -> itemHeightPixels.intValue = size.height }

@@ -13,12 +13,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingDataViewModel @Inject constructor(
-    private val userPreferencesDataStore: UserPreferencesDataStore,private val userRepository: UserRepositoryImpl
+    private val userPreferencesDataStore: UserPreferencesDataStore,
+    private val userRepository: UserRepositoryImpl
 ) : ViewModel() {
 
     private val _user = mutableStateOf(User(1, "", "", "", "", "", "", ""))
     val user: State<User> = _user
-
 
     fun onEvent(event: OnboardingEvent) {
         when (event) {
@@ -41,31 +41,31 @@ class OnboardingDataViewModel @Inject constructor(
         }
     }
 
-    fun onNameChange(name: String){
-        _user.value = _user.value.copy(name=name)
+    fun onNameChange(name: String) {
+        _user.value = _user.value.copy(name = name)
     }
 
-    fun onSexChange(sex: String){
-        _user.value = _user.value.copy(sex=sex)
+    fun onSexChange(sex: String) {
+        _user.value = _user.value.copy(sex = sex)
     }
 
-    fun onAgeChange(age: String){
-        _user.value = _user.value.copy(age=age)
+    fun onAgeChange(age: String) {
+        _user.value = _user.value.copy(age = age)
     }
 
-    fun onLifestyleChange(lifestyle: String){
-        _user.value = _user.value.copy(lifestyle=lifestyle)
+    fun onLifestyleChange(lifestyle: String) {
+        _user.value = _user.value.copy(lifestyle = lifestyle)
     }
 
-    fun onWeightChange(weight: String){
-        _user.value = _user.value.copy(weight=weight)
+    fun onWeightChange(weight: String) {
+        _user.value = _user.value.copy(weight = weight)
     }
 
-    fun onHeightChange(height: String){
-        _user.value = _user.value.copy(height=height)
+    fun onHeightChange(height: String) {
+        _user.value = _user.value.copy(height = height)
     }
 
-    fun onUnitsChange(units: String){
-        _user.value = _user.value.copy(units=units)
+    fun onUnitsChange(units: String) {
+        _user.value = _user.value.copy(units = units)
     }
 }

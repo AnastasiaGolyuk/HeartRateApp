@@ -46,25 +46,25 @@ fun ExpandablePickerButton(
     val selectedItem = pickerState.selectedItem
 
     var text by remember {
-        if (startIndex!=-1&&!dropDownMenuState.isUserToggleUnits) {
+        if (startIndex != -1 && !dropDownMenuState.isUserToggleUnits) {
             mutableStateOf(items[startIndex])
         } else {
             mutableStateOf("")
         }
     }
 
-    LaunchedEffect(dropDownMenuState.isUserToggleUnits){
-        if (dropDownMenuState.isUserToggleUnits){
-            text=""
+    LaunchedEffect(dropDownMenuState.isUserToggleUnits) {
+        if (dropDownMenuState.isUserToggleUnits) {
+            text = ""
         }
     }
 
-    LaunchedEffect(selectedItem){
-        if (selectedItem.isNotEmpty()){
-            text=selectedItem
+    LaunchedEffect(selectedItem) {
+        if (selectedItem.isNotEmpty()) {
+            text = selectedItem
         }
-        if (selectedItem.isEmpty()&&startIndex==-1){
-            text=selectedItem
+        if (selectedItem.isEmpty() && startIndex == -1) {
+            text = selectedItem
         }
     }
 
@@ -72,11 +72,7 @@ fun ExpandablePickerButton(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
-            .height(
-                if (!isVisible) 56.dp else
-                    178.dp
-            )
-            ,
+            .height(if (!isVisible) 56.dp else 178.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.elevatedButtonColors(
             containerColor = White
@@ -96,7 +92,7 @@ fun ExpandablePickerButton(
                     textAlign = TextAlign.Start,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                if ((text != "")  && !isVisible) {
+                if ((text != "") && !isVisible) {
                     Text(
                         style = MaterialTheme.typography.titleSmall,
                         color = RedAction,

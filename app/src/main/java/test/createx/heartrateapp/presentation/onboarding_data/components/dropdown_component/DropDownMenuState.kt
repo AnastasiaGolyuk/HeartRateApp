@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import test.createx.heartrateapp.presentation.common.picker.rememberPickerState
 
 @Composable
 fun rememberDropDownMenuState() = remember { DropDownMenuState() }
@@ -45,8 +44,8 @@ class DropDownMenuState {
         return list
     }
 
-    fun onUnitChange(unit:String,isUserToggleUnits:Boolean) {
-        this.isUserToggleUnits=isUserToggleUnits
+    fun onUnitChange(unit: String, isUserToggleUnits: Boolean) {
+        this.isUserToggleUnits = isUserToggleUnits
         if (unit == units[1]) {
             selectedUnit = units[1]
             weightsList = valuesWeightLb

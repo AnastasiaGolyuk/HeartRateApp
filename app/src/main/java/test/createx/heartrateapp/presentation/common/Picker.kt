@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.common.picker
+package test.createx.heartrateapp.presentation.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

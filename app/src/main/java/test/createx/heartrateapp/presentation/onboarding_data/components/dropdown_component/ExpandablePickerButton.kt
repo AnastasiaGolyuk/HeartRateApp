@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
-import test.createx.heartrateapp.presentation.common.picker.Picker
+import test.createx.heartrateapp.presentation.common.Picker
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.RedAction
 import test.createx.heartrateapp.ui.theme.White

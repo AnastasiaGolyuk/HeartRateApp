@@ -14,11 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,8 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.picker.Picker
-import test.createx.heartrateapp.presentation.common.picker.PickerState
-import test.createx.heartrateapp.presentation.common.picker.rememberPickerState
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.RedAction
 import test.createx.heartrateapp.ui.theme.White
@@ -35,38 +28,12 @@ import test.createx.heartrateapp.ui.theme.White
 @Composable
 fun ExpandablePickerButton(
     title: String,
-    dropDownMenuState: DropDownMenuState,
+    value: String,
     isVisible: Boolean,
     onToggleVisibility: () -> Unit,
-    pickerState: PickerState = rememberPickerState(),
     items: List<String>,
-    startIndex: Int = 0,
+    onSelect: (String) -> Unit
 ) {
-
-    val selectedItem = pickerState.selectedItem
-
-    var text by remember {
-        if (startIndex != -1 && !dropDownMenuState.isUserToggleUnits) {
-            mutableStateOf(items[startIndex])
-        } else {
-            mutableStateOf("")
-        }
-    }
-
-    LaunchedEffect(dropDownMenuState.isUserToggleUnits) {
-        if (dropDownMenuState.isUserToggleUnits) {
-            text = ""
-        }
-    }
-
-    LaunchedEffect(selectedItem) {
-        if (selectedItem.isNotEmpty()) {
-            text = selectedItem
-        }
-        if (selectedItem.isEmpty() && startIndex == -1) {
-            text = selectedItem
-        }
-    }
 
     Button(
         modifier = Modifier
@@ -92,11 +59,11 @@ fun ExpandablePickerButton(
                     textAlign = TextAlign.Start,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                if ((text != "") && !isVisible) {
+                if ((value != "") && !isVisible) {
                     Text(
                         style = MaterialTheme.typography.titleSmall,
                         color = RedAction,
-                        text = text,
+                        text = value,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 } else {
@@ -110,8 +77,8 @@ fun ExpandablePickerButton(
             if (isVisible) {
                 Picker(
                     items = items,
-                    state = pickerState,
-                    startIndex = startIndex
+                    startIndex = items.indexOf(value),
+                    onSelect = onSelect
                 )
             }
         }

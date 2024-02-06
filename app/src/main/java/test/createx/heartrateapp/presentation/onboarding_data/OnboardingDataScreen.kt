@@ -41,7 +41,8 @@ import test.createx.heartrateapp.domain.model.DataPage
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.onboarding_data.components.OnboardingDataPage
 import test.createx.heartrateapp.presentation.onboarding_data.components.TextInputComponent
-import test.createx.heartrateapp.presentation.onboarding_data.components.dropdown_component.DropDownMenuComponent
+import test.createx.heartrateapp.presentation.onboarding_data.components.dropdown_component.ExpandablePickerButton
+import test.createx.heartrateapp.presentation.onboarding_data.components.dropdown_component.UnitPicker
 import test.createx.heartrateapp.presentation.onboarding_data.components.toggle_input_component.ToggleInputComponent
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyBg
@@ -98,8 +99,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
                         tint = BlackMain
                     )
                 }
-            }
-            else {
+            } else {
                 Spacer(modifier = Modifier.width(24.dp))
             }
             PageIndicator(pageSize = pages.size, selectedPage = pagerState.currentPage)
@@ -170,19 +170,28 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
 
 @Composable
 private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
-    val pronouns = listOf("She / Her", "He / Him", "They / Them")
-    val age = listOf("Less than 20", "20-29", "30-39", "40-49", "50-59", "More than 60")
-    val lifestyle = listOf("Active", "Moderate", "Sedentary")
 
     val onClick: (String) -> Unit = { selectedValue ->
         when (index) {
             0 -> viewModel.onNameChange(selectedValue)
             1 -> viewModel.onSexChange(selectedValue)
             2 -> viewModel.onAgeChange(selectedValue)
-//            3 -> viewModel.onDropDownSelected(selectedValue)
             4 -> viewModel.onLifestyleChange(selectedValue)
         }
     }
+
+    val onHeightChange: (String) -> Unit = { height ->
+        viewModel.onHeightChange(height)
+    }
+
+    val onWeightChange: (String) -> Unit = { weight ->
+        viewModel.onWeightChange(weight)
+    }
+
+    val onUnitsChange: (String) -> Unit = { units ->
+        viewModel.onUnitsChange(units)
+    }
+
     when (index) {
         0 -> {
             TextInputComponent(onInput = onClick, text = viewModel.user.value.name)
@@ -190,32 +199,61 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
         1 -> {
             ToggleInputComponent(
-                data = pronouns, onClick = onClick,
-                value = viewModel.user.value.sex
+                data = viewModel.pronouns, onClick = onClick, value = viewModel.user.value.sex
             )
         }
 
         2 -> {
             ToggleInputComponent(
-                data = age, onClick = onClick,
-                value = viewModel.user.value.age
+                data = viewModel.age, onClick = onClick, value = viewModel.user.value.age
             )
         }
 
         3 -> {
-            DropDownMenuComponent(screenViewModel = viewModel)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.Start,
+            ) {
+
+                UnitPicker(
+                    value = viewModel.user.value.units,
+                    onChange = onUnitsChange,
+                    units = viewModel.units
+                )
+
+                ExpandablePickerButton(
+                    title = "Weight",
+                    isVisible = viewModel.isWeightPickerVisible,
+                    onToggleVisibility = {
+                        viewModel.onToggleWeightVisibility()
+                    },
+                    items = viewModel.weightsList,
+                    onSelect = onWeightChange,
+                    value = viewModel.user.value.weight
+                )
+
+                ExpandablePickerButton(
+                    title = "Height",
+                    isVisible = viewModel.isHeightPickerVisible,
+                    onToggleVisibility = {
+                        viewModel.onToggleHeightVisibility()
+                    },
+                    items = viewModel.heightsList,
+                    onSelect = onHeightChange,
+                    value = viewModel.user.value.height
+                )
+            }
         }
 
         4 -> {
             ToggleInputComponent(
-                data = lifestyle,
+                data = viewModel.lifestyle,
                 onClick = onClick,
                 value = viewModel.user.value.lifestyle,
             )
         }
     }
-
-
 }
 
 

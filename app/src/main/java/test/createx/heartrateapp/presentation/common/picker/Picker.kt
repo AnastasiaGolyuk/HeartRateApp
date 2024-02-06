@@ -31,13 +31,11 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import test.createx.heartrateapp.ui.theme.BlackMain
-import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.White
 
@@ -45,9 +43,9 @@ import test.createx.heartrateapp.ui.theme.White
 @Composable
 fun Picker(
     items: List<String>,
-    state: PickerState = rememberPickerState(),
     startIndex: Int = 0,
     visibleItemsCount: Int = 5,
+    onSelect: (String) -> Unit = {}
 ) {
 
     val visibleItemsMiddle = visibleItemsCount / 2
@@ -76,7 +74,9 @@ fun Picker(
         snapshotFlow { listState.firstVisibleItemIndex }
             .map { index -> getItem(index + visibleItemsMiddle) }
             .distinctUntilChanged()
-            .collect { item -> state.selectedItem = item }
+            .collect { item ->
+                onSelect(item)
+            }
     }
 
     Box(modifier = Modifier.padding(vertical = 7.dp)) {
@@ -126,17 +126,3 @@ private fun Modifier.fadingEdge(brush: Brush) = this
 
 @Composable
 private fun pixelsToDp(pixels: Int) = with(LocalDensity.current) { pixels.toDp() }
-
-@Preview(showBackground = true)
-@Composable
-fun PickerPreview() {
-    HeartRateAppTheme {
-        val values = remember { (30..200).map { it.toString() } }
-        val pickerState = rememberPickerState()
-        Picker(
-            state = pickerState,
-            items = values,
-            visibleItemsCount = 5,
-        )
-    }
-}

@@ -95,10 +95,10 @@ fun PaywallScreen(navController: NavController) {
                     ),
                     verticalAlignment = Alignment.Top,
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.chart_icon),
                         contentDescription = "",
-                        contentScale = ContentScale.None
+                        tint = RedMain
                     )
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
@@ -124,10 +124,10 @@ fun PaywallScreen(navController: NavController) {
                     ),
                     verticalAlignment = Alignment.Top,
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.idea_icon),
                         contentDescription = "",
-                        contentScale = ContentScale.None
+                        tint = RedMain
                     )
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
@@ -153,10 +153,10 @@ fun PaywallScreen(navController: NavController) {
                     ),
                     verticalAlignment = Alignment.Top,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.report_icon),
+                    Icon(
+                        painter = painterResource(id = R.drawable.report_icon ),
                         contentDescription = "",
-                        contentScale = ContentScale.None
+                        tint = RedMain
                     )
                     Column(
                         verticalArrangement = Arrangement.spacedBy(

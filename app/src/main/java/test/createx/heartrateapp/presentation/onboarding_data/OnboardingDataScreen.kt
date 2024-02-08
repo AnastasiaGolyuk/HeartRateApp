@@ -37,7 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import test.createx.heartrateapp.R
-import test.createx.heartrateapp.domain.model.DataPage
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.onboarding_data.components.OnboardingDataPage
 import test.createx.heartrateapp.presentation.onboarding_data.components.TextInputComponent

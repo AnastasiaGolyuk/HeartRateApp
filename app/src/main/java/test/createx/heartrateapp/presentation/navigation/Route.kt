@@ -11,6 +11,16 @@ sealed class Route(
 
     data object HeartRateScreen : Route(route = "heartRateScreen")
 
+    data object ReportScreen : Route(route = "reportScreen")
+
+    data object StatisticsScreen : Route(route = "statisticsScreen")
+
+    data object SettingsScreen : Route(route = "settingsScreen")
+
+    data object ProfileScreen : Route(route = "profileScreen")
+
+    data object WorkoutScreen : Route(route = "workoutScreen")
+
     data object AppStartNavigation : Route(route = "appStartNavigation")
 
     data object AppFunctionsNavigation : Route(route = "appFunctionsNavigation")

@@ -1,5 +1,7 @@
 package test.createx.heartrateapp.presentation.heart_rate
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +13,10 @@ import javax.inject.Inject
 class HeartRateViewModel @Inject constructor(
     userRepository: UserRepositoryImpl
 ) : ViewModel() {
+
+    private val _users = mutableStateOf(listOf<User>())
+    val users : State<List<User>> = _users
+
 
     val usersFlow: Flow<List<User>> = userRepository.getAllUsersStream()
 

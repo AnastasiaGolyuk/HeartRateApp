@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.domain.model
+package test.createx.heartrateapp.presentation.onboarding_data
 
 data class DataPage(
     val title: String,

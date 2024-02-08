@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import test.createx.heartrateapp.domain.model.Page
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding.components.OnboardingPage

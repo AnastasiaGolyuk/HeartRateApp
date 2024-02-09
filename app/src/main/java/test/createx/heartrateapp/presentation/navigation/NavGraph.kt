@@ -13,15 +13,18 @@ import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataScre
 import test.createx.heartrateapp.presentation.onboarding_data.OnboardingDataViewModel
 import test.createx.heartrateapp.presentation.paywall.PaywallScreen
 import test.createx.heartrateapp.presentation.profile.ProfileScreen
+import test.createx.heartrateapp.presentation.profile.ProfileViewModel
 import test.createx.heartrateapp.presentation.report.ReportScreen
 import test.createx.heartrateapp.presentation.settings.SettingsScreen
 import test.createx.heartrateapp.presentation.statistics.StatisticsScreen
+import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.presentation.workout.WorkoutScreen
 
 @Composable
 fun NavGraph(
     startDestination: String,
-    navController: NavHostController
+    navController: NavHostController,
+    onComposing: (TopAppBarNavigationState) -> Unit
 ) {
 
     NavHost(
@@ -59,10 +62,11 @@ fun NavGraph(
                 StatisticsScreen()
             }
             composable(route = Route.SettingsScreen.route) {
-               SettingsScreen()
+                SettingsScreen(navController = navController)
             }
-            composable(route = Route.ProfileScreen.route) {
-                ProfileScreen()
+            composable(route = Route.SettingsScreen.ProfileScreen.route) {
+                val viewModel: ProfileViewModel = hiltViewModel()
+                ProfileScreen(viewModel = viewModel, onComposing = onComposing, navController = navController)
             }
             composable(route = Route.WorkoutScreen.route) {
                 WorkoutScreen()

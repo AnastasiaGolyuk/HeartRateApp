@@ -29,7 +29,7 @@ fun BottomNavBar(navController: NavController) {
         BottomNavBarItem.WorkoutScreen,
         BottomNavBarItem.HeartRateScreen,
         BottomNavBarItem.ReportScreen,
-        BottomNavBarItem.SettingsScreen
+        BottomNavBarItem.SettingsScreen,
     )
     BottomAppBar(
         modifier = Modifier.height(64.dp),

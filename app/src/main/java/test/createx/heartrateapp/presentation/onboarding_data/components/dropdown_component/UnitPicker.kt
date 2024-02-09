@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.RedAction
@@ -25,6 +24,8 @@ import test.createx.heartrateapp.ui.theme.White
 
 @Composable
 fun UnitPicker(
+    iconRes:Int = -1,
+    shape: RoundedCornerShape,
     value: String,
     onChange: (String) -> Unit,
     units: List<String>
@@ -34,7 +35,7 @@ fun UnitPicker(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(shape)
             .background(White),
     ) {
         Row(
@@ -45,12 +46,7 @@ fun UnitPicker(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                style = MaterialTheme.typography.titleSmall,
-                color = BlackMain,
-                text = "Units",
-                textAlign = TextAlign.Center
-            )
+            ButtonContent(title = "Units", iconDrawableRes = iconRes)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(
                     0.dp,

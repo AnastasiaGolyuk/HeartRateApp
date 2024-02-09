@@ -46,7 +46,6 @@ fun ToggleInputComponent(
                 )
             }
         }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -58,6 +57,5 @@ fun ToggleInputComponent(
                     )
                 )
         )
-
     }
 }

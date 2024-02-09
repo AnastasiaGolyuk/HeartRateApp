@@ -16,17 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -49,12 +46,19 @@ fun Picker(
 ) {
 
     val visibleItemsMiddle = visibleItemsCount / 2
-    val listScrollCount = Integer.MAX_VALUE
-    val listScrollMiddle = listScrollCount / 2
-    val listStartIndex =
-        listScrollMiddle - listScrollMiddle % items.size - visibleItemsMiddle + startIndex
 
-    fun getItem(index: Int) = items[index % items.size]
+    val blankItemsList = List(visibleItemsMiddle) { "" }
+    val preparedItems = mutableStateListOf<String>()
+
+    preparedItems.addAll(blankItemsList)
+    preparedItems.addAll(items)
+    preparedItems.addAll(blankItemsList)
+
+    val listScrollCount = preparedItems.size
+
+    fun getItem(index: Int) = preparedItems[index]
+
+    val listStartIndex = if (startIndex == -1) listScrollCount / 2 else startIndex
 
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
@@ -62,17 +66,14 @@ fun Picker(
     val itemHeightPixels = remember { mutableIntStateOf(0) }
     val itemHeightDp = pixelsToDp(itemHeightPixels.intValue)
 
-    val fadingEdgeGradient = remember {
-        Brush.verticalGradient(
-            0f to Color.Transparent,
-            0.5f to BlackMain,
-            1f to Color.Transparent
-        )
-    }
-
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
-            .map { index -> getItem(index + visibleItemsMiddle) }
+            .map { index ->
+                getItem(
+                    index
+                            + visibleItemsMiddle
+                )
+            }
             .distinctUntilChanged()
             .collect { item ->
                 onSelect(item)
@@ -87,7 +88,6 @@ fun Picker(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(itemHeightDp * visibleItemsCount)
-                .fadingEdge(fadingEdgeGradient)
                 .background(color = White)
         ) {
             items(listScrollCount) { index ->
@@ -108,6 +108,16 @@ fun Picker(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(itemHeightDp * visibleItemsCount)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(White, Color.Transparent, White),
+                    )
+                )
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(itemHeightDp + 4.dp)
                 .offset(y = itemHeightDp * visibleItemsMiddle - 2.dp)
                 .clip(RoundedCornerShape(8.dp))
@@ -116,13 +126,6 @@ fun Picker(
         )
     }
 }
-
-private fun Modifier.fadingEdge(brush: Brush) = this
-    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
-    .drawWithContent {
-        drawContent()
-        drawRect(brush = brush, blendMode = BlendMode.DstIn)
-    }
 
 @Composable
 private fun pixelsToDp(pixels: Int) = with(LocalDensity.current) { pixels.toDp() }

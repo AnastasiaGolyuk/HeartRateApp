@@ -17,8 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -29,11 +29,15 @@ import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedAction
-import test.createx.heartrateapp.ui.theme.White
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextInputComponent(onInput: (String) -> Unit, text: String) {
+fun TextInputComponent(
+    onInput: (String) -> Unit,
+    text: String,
+    onToggleVisibility: () -> Unit = {},
+    containerColor: Color
+) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -54,7 +58,7 @@ fun TextInputComponent(onInput: (String) -> Unit, text: String) {
                 onInput(it)
                 isError = if (isValidText(it)) {
                     false
-                } else  {
+                } else {
                     it.isNotEmpty()
                 }
             },
@@ -71,6 +75,7 @@ fun TextInputComponent(onInput: (String) -> Unit, text: String) {
             keyboardActions = KeyboardActions(
                 onDone = {
                     keyboardController?.hide()
+                    onToggleVisibility()
                 }
             ),
             modifier = Modifier
@@ -78,22 +83,22 @@ fun TextInputComponent(onInput: (String) -> Unit, text: String) {
                 .focusRequester(focusRequester),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = RedAction,
-                containerColor = White,
+                containerColor = containerColor,
                 placeholderColor = GreySubText,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             textStyle = MaterialTheme.typography.titleSmall,
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(10.dp),
         )
-        if (isError) {
-            Text(
-                text = "Please use standard characters only - no symbols",
-                modifier = Modifier.padding(top = 8.dp),
-                style = MaterialTheme.typography.labelSmall,
-                color = RedAction
-            )
-        }
+        Text(
+            text = "Please use standard characters only - no symbols",
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .alpha(if (isError) 1f else 0f),
+            style = MaterialTheme.typography.labelSmall,
+            color = RedAction
+        )
     }
 }
 

@@ -19,7 +19,7 @@ class OnboardingDataViewModel @Inject constructor(
     private val userRepository: UserRepositoryImpl
 ) : ViewModel() {
 
-    private val _user = mutableStateOf(User(1, "", "", "", "", "", "", ""))
+    private val _user = mutableStateOf(User(0, "", "", "", "", "", "", ""))
     val user: State<User> = _user
 
     val pronouns = listOf("She / Her", "He / Him", "They / Them")
@@ -71,9 +71,12 @@ class OnboardingDataViewModel @Inject constructor(
 
     fun onEvent(event: OnboardingEvent) {
         when (event) {
-            is OnboardingEvent.OnboardingCompleted -> {
+            OnboardingEvent.OnboardingCompleted -> {
                 saveAppEntry()
                 addUser(_user.value)
+            }
+            OnboardingEvent.OnboardingSkipped -> {
+                saveAppEntry()
             }
         }
     }

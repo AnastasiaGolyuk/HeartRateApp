@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -49,7 +48,7 @@ import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.White
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
 
@@ -103,7 +102,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
             }
             PageIndicator(pageSize = pages.size, selectedPage = pagerState.currentPage)
             TextButton(onClick = {
-                viewModel.onEvent(OnboardingEvent.OnboardingCompleted)
+                viewModel.onEvent(OnboardingEvent.OnboardingSkipped)
             }, content = {
                 Text(
                     text = "Skip",
@@ -193,7 +192,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
     when (index) {
         0 -> {
-            TextInputComponent(onInput = onClick, text = viewModel.user.value.name)
+            TextInputComponent(onInput = onClick, text = viewModel.user.value.name, containerColor = White)
         }
 
         1 -> {
@@ -216,6 +215,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
             ) {
 
                 UnitPicker(
+                    shape = RoundedCornerShape(10.dp),
                     value = viewModel.user.value.units,
                     onChange = onUnitsChange,
                     units = viewModel.units
@@ -223,6 +223,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
                 ExpandablePickerButton(
                     title = "Weight",
+                    shape= RoundedCornerShape(10.dp),
                     isVisible = viewModel.isWeightPickerVisible,
                     onToggleVisibility = {
                         viewModel.onToggleWeightVisibility()
@@ -234,6 +235,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
                 ExpandablePickerButton(
                     title = "Height",
+                    shape= RoundedCornerShape(10.dp),
                     isVisible = viewModel.isHeightPickerVisible,
                     onToggleVisibility = {
                         viewModel.onToggleHeightVisibility()

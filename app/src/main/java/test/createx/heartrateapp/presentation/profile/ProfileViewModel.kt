@@ -35,7 +35,7 @@ class ProfileViewModel @Inject constructor(
                     _user.value = res[0]
                     isExist = true
                 } else {
-                    onUnitsChange(units[0])
+                    _user.value = _user.value.copy(units = units[0])
                 }
             }
         }

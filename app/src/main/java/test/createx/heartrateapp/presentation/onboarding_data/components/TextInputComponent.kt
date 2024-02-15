@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +29,6 @@ import test.createx.heartrateapp.R
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedAction
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputComponent(
     onInput: (String) -> Unit,
@@ -81,12 +79,17 @@ fun TextInputComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = RedAction,
-                containerColor = containerColor,
-                placeholderColor = GreySubText,
+            colors = TextFieldDefaults.colors(
+                unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedContainerColor = containerColor,
+                focusedContainerColor = containerColor,
+                errorContainerColor = containerColor,
+                unfocusedPlaceholderColor = GreySubText,
+                focusedPlaceholderColor = GreySubText,
+                unfocusedTextColor = RedAction,
+                focusedTextColor = RedAction,
+                errorTextColor = RedAction
             ),
             textStyle = MaterialTheme.typography.titleSmall,
             shape = RoundedCornerShape(10.dp),

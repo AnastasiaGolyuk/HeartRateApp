@@ -52,8 +52,10 @@ fun NavGraph(
             startDestination = Route.HeartRateScreen.route
         ) {
             composable(route = Route.HeartRateScreen.route) {
-                val viewModel: HeartRateViewModel = hiltViewModel()
-                HeartRateScreen(viewModel = viewModel)
+//                val viewModel: HeartRateViewModel = hiltViewModel()
+                HeartRateScreen(
+//                    viewModel = viewModel
+                )
             }
             composable(route = Route.ReportScreen.route) {
                 ReportScreen()

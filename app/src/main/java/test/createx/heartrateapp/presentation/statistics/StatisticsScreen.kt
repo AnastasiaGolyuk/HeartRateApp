@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,14 +33,18 @@ import test.createx.heartrateapp.ui.theme.RedMain
 
 @Composable
 fun StatisticsScreen() {
-
-    Box(modifier = Modifier.fillMaxSize().background(GreyBg)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(GreyBg)
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize().padding(top=100.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
             Box(contentAlignment = Alignment.TopCenter) {
                 Image(
                     modifier = Modifier.size(310.dp),

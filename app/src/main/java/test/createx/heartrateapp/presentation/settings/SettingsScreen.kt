@@ -52,7 +52,7 @@ fun SettingsScreen(navController: NavController) {
                     containerColor = White
                 ),
                 contentPadding = PaddingValues(16.dp),
-                onClick = { navController.navigate(Route.SettingsScreen.ProfileScreen.route)}) {
+                onClick = { navController.navigate(Route.ProfileScreen.route)}) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start

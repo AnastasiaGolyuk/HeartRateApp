@@ -94,4 +94,7 @@ dependencies {
     //ComposeSensors
     implementation("com.mutualmobile:composesensors:1.1.2")
 
+    //Lottie
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
 }

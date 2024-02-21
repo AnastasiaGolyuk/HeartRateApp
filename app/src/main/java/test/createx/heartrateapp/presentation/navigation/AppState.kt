@@ -19,7 +19,7 @@ class AppState @Inject constructor(
         Route.HeartRateScreen,
         Route.ReportScreen,
         Route.SettingsScreen,
-        Route.SettingsScreen.ProfileScreen
+        Route.ProfileScreen
     )
     private val appBarsRoutes = appBarsRoutesList.map { it.route }
 
@@ -29,19 +29,21 @@ class AppState @Inject constructor(
 
     val shouldShowTopAppBarIcon: Boolean
         @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination?.route == Route.SettingsScreen.ProfileScreen.route
+            .currentBackStackEntryAsState().value?.destination?.route == Route.ProfileScreen.route
 
-    fun getTopBarTitle(route: String): String {
-        return when (route) {
-            Route.StatisticsScreen.route -> "My statistics"
-            Route.WorkoutScreen.route -> "Workout"
-            Route.HeartRateScreen.route -> "Heart rate"
-            Route.ReportScreen.route -> "My reports"
-            Route.SettingsScreen.route -> "Settings"
-            Route.SettingsScreen.ProfileScreen.route -> "Profile details"
-            else -> ""
+    val topBarTitle: String
+        @Composable get() {
+            return when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+                Route.StatisticsScreen.route -> "My statistics"
+                Route.WorkoutScreen.route -> "Workout"
+                Route.HeartRateScreen.route -> "Heart rate"
+                Route.ReportScreen.route -> "My reports"
+                Route.SettingsScreen.route -> "Settings"
+                Route.ProfileScreen.route -> "Profile details"
+                else -> ""
+            }
         }
-    }
+
 
     private val _topAppBarNavigationState = mutableStateOf(TopAppBarNavigationState())
     val topAppBarNavigationState: State<TopAppBarNavigationState> = _topAppBarNavigationState

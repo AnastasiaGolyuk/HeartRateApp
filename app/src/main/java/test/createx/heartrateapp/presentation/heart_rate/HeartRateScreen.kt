@@ -76,7 +76,6 @@ fun HeartRateScreen(
             delay(100L)
             timeLeft -= 0.1f
         }
-        delay(500L)
     }
 
 
@@ -223,9 +222,8 @@ fun HeartRateScreen(
             })
         }
         if (timeLeft<=0f) {
-            println("hi")
             StateBottomSheetDialog (onDismiss = {
-
+                isPaused = true
             })
         }
     }

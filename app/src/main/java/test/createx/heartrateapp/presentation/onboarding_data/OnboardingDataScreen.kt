@@ -34,9 +34,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.PageIndicator
+import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding_data.components.OnboardingDataPage
 import test.createx.heartrateapp.presentation.onboarding_data.components.TextInputComponent
 import test.createx.heartrateapp.presentation.onboarding_data.components.dropdown_component.ExpandablePickerButton
@@ -50,7 +52,7 @@ import test.createx.heartrateapp.ui.theme.White
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
+fun OnboardingDataScreen(viewModel: OnboardingDataViewModel, navController: NavController) {
 
     val pages = DataPage.get()
     val pagerState = rememberPagerState(
@@ -93,7 +95,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.return_icon),
-                        contentDescription = "Favorite",
+                        contentDescription = "Go back",
                         tint = BlackMain
                     )
                 }
@@ -103,6 +105,8 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
             PageIndicator(pageSize = pages.size, selectedPage = pagerState.currentPage)
             TextButton(onClick = {
                 viewModel.onEvent(OnboardingEvent.OnboardingSkipped)
+                navController.popBackStack()
+                navController.navigate(Route.HomeScreen.route)
             }, content = {
                 Text(
                     text = "Skip",
@@ -130,6 +134,8 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel) {
                     scopeContinue.launch {
                         if (pagerState.currentPage == pages.size - 1) {
                             viewModel.onEvent(OnboardingEvent.OnboardingCompleted)
+                            navController.popBackStack()
+                            navController.navigate(Route.HomeScreen.route)
                         } else {
                             pagerState.animateScrollToPage(
                                 page = pagerState.currentPage + 1
@@ -260,7 +266,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
 private fun getEnabledStatus(index: Int, viewModel: OnboardingDataViewModel): Boolean {
     return when (index) {
-        0 -> viewModel.user.value.name.isNotEmpty()
+        0 -> viewModel.user.value.name.isNotEmpty() && viewModel.user.value.name.matches(Regex("[a-zA-Z0-9]+"))
         1 -> viewModel.user.value.sex.isNotEmpty()
         2 -> viewModel.user.value.age.isNotEmpty()
         3 -> viewModel.user.value.weight.isNotEmpty() || viewModel.user.value.height.isNotEmpty()

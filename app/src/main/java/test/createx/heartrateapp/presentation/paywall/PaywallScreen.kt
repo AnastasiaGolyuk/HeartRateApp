@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -250,11 +250,11 @@ fun PaywallScreen(navController: NavController) {
                             },
                             contentPadding = PaddingValues(0.dp)
                         )
-                        Divider(
-                            color = RedMain.copy(alpha = 0.2f),
+                        HorizontalDivider(
                             modifier = Modifier
                                 .height(16.dp)
-                                .width(1.dp)
+                                .width(1.dp),
+                            color = RedMain.copy(alpha = 0.2f)
                         )
                         TextButton(
                             onClick = { /* Handle button click event */ },

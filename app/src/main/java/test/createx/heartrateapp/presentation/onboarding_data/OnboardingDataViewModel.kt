@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingDataViewModel @Inject constructor(
     private val userPreferencesDataStore: UserPreferencesDataStore,
-    private val userRepository: UserRepositoryImpl
+    private val userRepository: UserRepositoryImpl,
 ) : ViewModel() {
 
     private val _user = mutableStateOf(User(0, "", "", "", "", "", "", ""))

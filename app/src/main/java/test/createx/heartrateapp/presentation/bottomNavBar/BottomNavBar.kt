@@ -58,12 +58,6 @@ fun BottomNavBar(navController: NavController) {
                 selectedContentColor = RedBg,
                 onClick = {
                     navController.navigate(item.route) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
-                            }
-                        }
-                        launchSingleTop = true
                         restoreState = true
                     }
                 })

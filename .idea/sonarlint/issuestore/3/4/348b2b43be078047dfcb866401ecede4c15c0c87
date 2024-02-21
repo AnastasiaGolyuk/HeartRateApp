@@ -1,9 +1,3 @@
 
-Bkotlin:S125:"Remove this commented out code.(§çÎéıÿÿÿÿ8¹°ÛËÚ1
-=kotlin:S125<"Remove this commented out code.(¡˜åí8º°ÛËÚ1
-=kotlin:S125G"Remove this commented out code.(àıü¤8º°ÛËÚ1
-9kotlin:S1128"Remove this unused import.(üáÕÒ8Ğ––ÃÚ1
->kotlin:S1128"Remove this unused import.(Èšå¶üÿÿÿÿ8Ğ––ÃÚ1
->kotlin:S1128"Remove this unused import.(Ô×û¼úÿÿÿÿ8Å°ÛËÚ1
-9kotlin:S1128"Remove this unused import.(©ÎÖÅ8Å°ÛËÚ1
->kotlin:S1128'"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8Å°ÛËÚ1
+Bkotlin:S125;"Remove this commented out code.(§çÎéıÿÿÿÿ8¢˜¾Û1
+qkotlin:S37767"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÃÂ¼‡8Ú˜¾Û1

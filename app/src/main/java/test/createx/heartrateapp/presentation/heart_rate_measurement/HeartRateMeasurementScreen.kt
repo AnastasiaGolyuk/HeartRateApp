@@ -1,11 +1,6 @@
-package test.createx.heartrateapp.presentation.heart_rate
+package test.createx.heartrateapp.presentation.heart_rate_measurement
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.view.SurfaceView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,14 +12,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,20 +27,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import test.createx.heartrateapp.R
+import test.createx.heartrateapp.presentation.common.AlertDialog
+import test.createx.heartrateapp.presentation.common.AnimationLottie
 import test.createx.heartrateapp.presentation.common.CircularProgressIndicator
 import test.createx.heartrateapp.presentation.heart_rate.components.HintBottomSheetDialog
-import test.createx.heartrateapp.presentation.navigation.Graph
+import test.createx.heartrateapp.presentation.heart_rate.components.StateBottomSheetDialog
+import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.ui.theme.BlackMain
+import test.createx.heartrateapp.ui.theme.GreenRateText
 import test.createx.heartrateapp.ui.theme.GreyBg
 import test.createx.heartrateapp.ui.theme.GreyProgressbar
 import test.createx.heartrateapp.ui.theme.GreySubText
@@ -53,22 +52,62 @@ import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.RedProgressbar
 import test.createx.heartrateapp.ui.theme.White
+import kotlin.math.ceil
 
 @Composable
-fun HeartRateScreen(
+fun HeartRateMeasurementScreen(
+    viewModel: HeartRateMeasurementViewModel, onComposing: (TopAppBarNavigationState) -> Unit,
     navController: NavController
 ) {
 
+    val rate = viewModel.rate
+
+    val hint = viewModel.hint
+
     var showSheet by remember { mutableStateOf(false) }
 
-    val context = LocalContext.current
+    val timeLeft = viewModel.timeLeft
 
-    val permission = Manifest.permission.CAMERA
+    val isPaused = viewModel.isPaused
 
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        showSheet = isGranted
+    var previewView: SurfaceView? by remember {
+        mutableStateOf(null)
+    }
+
+    val openAlertDialog = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        onComposing(
+            TopAppBarNavigationState(
+                action = {
+                    openAlertDialog.value = true
+                },
+                iconRes = R.drawable.close_icon
+            )
+        )
+    }
+
+    LaunchedEffect(previewView) {
+        if (previewView != null && !viewModel.areBpmUpdatesInited()) {
+            delay(800)
+            viewModel.initBpmUpdates(previewView!!)
+        }
+    }
+
+    LaunchedEffect(timeLeft.value) {
+        if (timeLeft.value <= 0) {
+            showSheet = true
+        }
+    }
+
+    LaunchedEffect(isPaused.value) {
+        viewModel.startMeasurement()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.disposeSubscription()
+        }
     }
 
     Box(
@@ -76,6 +115,41 @@ fun HeartRateScreen(
             .fillMaxSize()
             .background(White)
     ) {
+        Box(modifier = Modifier.size(1.dp)) {
+            AndroidView(
+                factory = { context ->
+                    SurfaceView(context).apply {
+                        this.clipToOutline = true
+                        previewView = this
+                    }
+                },
+                modifier = Modifier.matchParentSize(),
+                update = { previewView = it }
+            )
+        }
+        if (openAlertDialog.value) {
+            AlertDialog(
+                onDismissRequest = { openAlertDialog.value = false },
+                onConfirmation = {
+                    openAlertDialog.value = false
+                    viewModel.disposeSubscription()
+                    navController.popBackStack()
+                },
+                dialogTitle = "Close the measurement?",
+                dialogText = "The measured data will not be saved",
+                confirmButtonText = "Close"
+            )
+        }
+        Box(modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .fillMaxWidth()
+            .padding(bottom = 20.dp)) {
+            AnimationLottie(
+                animationId = R.raw.pulse_indicator,
+                contentScale = ContentScale.FillWidth,
+                isPlaying = !isPaused.value
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,7 +167,7 @@ fun HeartRateScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(16.dp),
-                    text = Hint.get()[0].hint,
+                    text = hint.value.hint,
                     style = MaterialTheme.typography.bodyMedium,
                     color = RedMain,
                     textAlign = TextAlign.Start
@@ -110,7 +184,7 @@ fun HeartRateScreen(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .fillMaxSize(),
-                    positionValue = 0f,
+                    positionValue = 100f - (timeLeft.value * 100f / 30f),
                     primaryColor = RedProgressbar,
                     secondaryColor = GreyProgressbar,
                 )
@@ -129,7 +203,7 @@ fun HeartRateScreen(
                     )
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "--",
+                            text = rate.value,
                             style = MaterialTheme.typography.titleLarge,
                             color = BlackMain,
                             textAlign = TextAlign.Center
@@ -152,7 +226,7 @@ fun HeartRateScreen(
                     )
                     .border(
                         width = 2.dp,
-                        color = Color.Transparent,
+                        color = if (timeLeft.value == 30f) Color.Transparent else if (isPaused.value) RedMain else GreenRateText,
                         shape = RoundedCornerShape(50.dp)
                     )
             ) {
@@ -161,7 +235,6 @@ fun HeartRateScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically)
                 ) {
-
                     Text(
                         text = "Measurement time:",
                         style = MaterialTheme.typography.bodySmall,
@@ -169,7 +242,11 @@ fun HeartRateScreen(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "Just 30 seconds",
+                        text = if (ceil(timeLeft.value) == 30f) "Just ${ceil(timeLeft.value).toInt()} seconds" else "${
+                            ceil(
+                                timeLeft.value
+                            ).toInt()
+                        } seconds left",
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = RedMain,
                         textAlign = TextAlign.Center
@@ -178,59 +255,10 @@ fun HeartRateScreen(
                 }
             }
         }
-        ElevatedButton(
-            onClick = {
-                checkAndRequestCameraPermission(
-                    context = context,
-                    permission = permission,
-                    onPermissionGranted = { isGranted ->
-                        showSheet = isGranted
-                    },
-                    launcher = launcher
-                )
-            },
-            modifier = Modifier
-                .padding(bottom = 50.dp)
-                .height(48.dp)
-                .align(Alignment.BottomCenter)
-                .shadow(
-                    elevation = 10.dp,
-                    shape = RoundedCornerShape(50.dp),
-                    clip = true,
-                    ambientColor = Color(0xFFCC0909),
-                    spotColor = Color(0xFFCC0909),
-                ),
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = RedMain,
-                disabledContainerColor = RedMain.copy(alpha = 0.5f),
-                disabledContentColor = RedMain.copy(alpha = 0.5f),
-            )
-        ) {
-            Text(
-                text = "Start measurement",
-                style = MaterialTheme.typography.titleSmall,
-                color = Color.White
-            )
-        }
         if (showSheet) {
-            HintBottomSheetDialog(onDismiss = {
+            StateBottomSheetDialog(onDismiss = {
                 showSheet = false
-                navController.navigate(Graph.HeartMeasurementGraph.route)
             })
         }
-    }
-}
-
-fun checkAndRequestCameraPermission(
-    context: Context,
-    permission: String,
-    onPermissionGranted: (Boolean) -> Unit,
-    launcher: ManagedActivityResultLauncher<String, Boolean>
-) {
-    val permissionCheckResult = ContextCompat.checkSelfPermission(context, permission)
-    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-        onPermissionGranted(true)
-    } else {
-        launcher.launch(permission)
     }
 }

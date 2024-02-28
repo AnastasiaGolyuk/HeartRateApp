@@ -7,7 +7,6 @@ data class Hint(
     val hint: String,
     @DrawableRes val image: Int? = null,
 ) {
-
     companion object {
         fun get() = listOf(
             Hint(hint = "Relax, don't control your breathing. Press the button to start the measurement"),

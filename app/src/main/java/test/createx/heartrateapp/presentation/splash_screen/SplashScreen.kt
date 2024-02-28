@@ -34,7 +34,7 @@ fun SplashScreen(navController: NavController, viewModel: SplashViewModel) {
         )
         if ((logoAnimationState.isAtEnd && logoAnimationState.isPlaying)) {
             navController.popBackStack()
-            navController.navigate(viewModel.startDestination.value)
+            navController.navigate(route = viewModel.startDestination.value)
         }
     }
 }

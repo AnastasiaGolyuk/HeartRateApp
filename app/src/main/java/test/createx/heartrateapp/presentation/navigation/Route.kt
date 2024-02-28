@@ -15,6 +15,10 @@ sealed class Route(
 
     data object HeartRateScreen : Route(route = "heartRateScreen")
 
+    data object HeartRateMeasurementScreen : Route(route = "heartRateMeasurementScreen")
+
+    data object HeartRateReportScreen : Route(route = "heartRateReportScreen")
+
     data object ReportScreen : Route(route = "reportScreen")
 
     data object StatisticsScreen : Route(route = "statisticsScreen")
@@ -24,5 +28,4 @@ sealed class Route(
     data object ProfileScreen : Route(route = "profileScreen")
 
     data object WorkoutScreen : Route(route = "workoutScreen")
-
 }

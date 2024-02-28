@@ -3,6 +3,7 @@ package test.createx.heartrateapp.presentation.bottomNavBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomAppBar
@@ -12,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,7 +26,7 @@ import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.White
 
 @Composable
-fun BottomNavBar(navController: NavController) {
+fun BottomNavBar(navController: NavController, offset: Dp) {
     val items = listOf(
         BottomNavBarItem.StatisticsScreen,
         BottomNavBarItem.WorkoutScreen,
@@ -32,7 +35,9 @@ fun BottomNavBar(navController: NavController) {
         BottomNavBarItem.SettingsScreen,
     )
     BottomAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .height(64.dp)
+            .offset(y = offset),
         backgroundColor = White,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

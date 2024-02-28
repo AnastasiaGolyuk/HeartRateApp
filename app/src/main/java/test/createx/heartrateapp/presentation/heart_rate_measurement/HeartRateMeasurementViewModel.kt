@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.heart_rate
+package test.createx.heartrateapp.presentation.heart_rate_measurement
 
 import android.view.SurfaceView
 import androidx.compose.runtime.MutableState
@@ -17,11 +17,12 @@ import net.kibotu.heartrateometer.HeartRateOmeter
 import test.createx.heartrateapp.data.database.entity.HeartRate
 import test.createx.heartrateapp.data.database.entity.User
 import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
+import test.createx.heartrateapp.presentation.heart_rate.Hint
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class HeartRateViewModel @Inject constructor(
+class HeartRateMeasurementViewModel @Inject constructor(
     userRepository: UserRepositoryImpl
 ) : ViewModel() {
 
@@ -96,6 +97,14 @@ class HeartRateViewModel @Inject constructor(
                 { it -> println("${it.message}") }
             )
         _subscription.value?.add(_bpmUpdates.value!!)
+    }
+    
+    fun areBpmUpdatesInited():Boolean{
+        return if (_subscription.value!=null){
+            _subscription.value!!.size() >0
+        } else {
+            false
+        }
     }
 
     fun flushMeasurementData(){

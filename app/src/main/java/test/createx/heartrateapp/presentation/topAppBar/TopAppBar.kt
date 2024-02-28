@@ -1,5 +1,9 @@
 package test.createx.heartrateapp.presentation.topAppBar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.Icon
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +39,11 @@ fun TopAppBar(
             )
         },
         navigationIcon = {
-            if (shouldShowNavigationButton && iconRes != -1 ) {
+            AnimatedVisibility(
+                visible = (shouldShowNavigationButton && iconRes != -1),
+                enter = fadeIn(animationSpec = tween(650)),
+                exit = fadeOut(animationSpec = tween(650))
+            ) {
                 IconButton(onClick = action) {
                     Icon(
                         painter = painterResource(id = iconRes),

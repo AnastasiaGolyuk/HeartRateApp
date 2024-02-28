@@ -19,10 +19,12 @@ class SplashViewModel @Inject constructor(
     private val _startDestination = mutableStateOf(Route.OnboardingScreen.route)
     val startDestination: State<String> = _startDestination
 
+    private val isFirstEnter = true
+
     init {
         userPreferencesDataStore.readAppEntry().onEach { shouldStartFromHomeScreen ->
             _startDestination.value = if (shouldStartFromHomeScreen) {
-                Route.HomeScreen.route
+                "${Route.HomeScreen.route}?isFirstEnter=${isFirstEnter}"
             } else {
                 Route.OnboardingScreen.route
             }

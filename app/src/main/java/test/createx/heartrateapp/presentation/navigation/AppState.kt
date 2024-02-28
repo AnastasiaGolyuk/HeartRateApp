@@ -24,7 +24,8 @@ class AppState @Inject constructor(
     private val appBarsRoutes = appBarsRoutesList.map { it.route }
 
     private val appBarIconRoutesList = listOf(
-        Route.HeartRateScreen,
+        Route.HeartRateMeasurementScreen,
+        Route.HeartRateReportScreen,
         Route.ProfileScreen
     )
     private val appBarIconRoutes = appBarIconRoutesList.map { it.route }
@@ -44,6 +45,8 @@ class AppState @Inject constructor(
                 Route.StatisticsScreen.route -> "My statistics"
                 Route.WorkoutScreen.route -> "Workout"
                 Route.HeartRateScreen.route -> "Heart rate"
+                Route.HeartRateMeasurementScreen.route -> "Heart rate"
+                Route.HeartRateReportScreen.route -> "Heart rate"
                 Route.ReportScreen.route -> "My reports"
                 Route.SettingsScreen.route -> "Settings"
                 Route.ProfileScreen.route -> "Profile details"

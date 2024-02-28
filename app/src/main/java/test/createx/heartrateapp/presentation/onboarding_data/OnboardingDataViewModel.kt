@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import test.createx.heartrateapp.data.database.UserRepositoryImpl
+import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
 import test.createx.heartrateapp.data.database.entity.User
 import test.createx.heartrateapp.data.preferences.UserPreferencesDataStore
 import javax.inject.Inject

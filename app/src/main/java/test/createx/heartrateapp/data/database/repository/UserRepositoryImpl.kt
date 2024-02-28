@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.data.database
+package test.createx.heartrateapp.data.database.repository
 
 import kotlinx.coroutines.flow.Flow
 import test.createx.heartrateapp.data.database.dao.UserDao

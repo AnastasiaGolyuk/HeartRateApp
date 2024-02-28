@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import test.createx.heartrateapp.data.database.dao.HeartRateDao
 import test.createx.heartrateapp.data.database.dao.UserDao
 import javax.inject.Singleton
 
@@ -16,6 +17,11 @@ class DatabaseModule {
     @Provides
     fun provideUserDao(appDatabase: UserRoomDatabase): UserDao {
         return appDatabase.userDao()
+    }
+
+    @Provides
+    fun provideHeartRateDao(appDatabase: UserRoomDatabase): HeartRateDao {
+        return appDatabase.heartRateDao()
     }
 
     @Provides

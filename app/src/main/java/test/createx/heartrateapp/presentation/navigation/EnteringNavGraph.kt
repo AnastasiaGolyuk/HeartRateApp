@@ -15,9 +15,7 @@ import test.createx.heartrateapp.presentation.splash_screen.SplashViewModel
 
 @Composable
 fun EnteringNavGraph(
-//    startDestination: String,
     navController: NavHostController,
-//    onComposing: (TopAppBarNavigationState) -> Unit
 ) {
 
     NavHost(

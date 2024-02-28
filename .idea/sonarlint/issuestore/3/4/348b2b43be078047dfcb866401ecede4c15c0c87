@@ -1,3 +1,6 @@
 
-Bkotlin:S125;"Remove this commented out code.(§çÎéıÿÿÿÿ8¢˜¾Û1
-qkotlin:S37767"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÃÂ¼‡8Ú˜¾Û1
+Vkotlin:S1172E"2Remove this unused function parameter "viewModel".(¶ˆÜÁûÿÿÿÿ8¤°ŸåŞ1
+Bkotlin:S125W"Remove this commented out code.(îîôúÿÿÿÿ8¨°ŸåŞ1
+zkotlin:S6558Œ"URemove this it parameter declaration or give this lambda parameter a meaningful name.(¡†èÇùÿÿÿÿ8­°ŸåŞ1
+>kotlin:S1128/"Remove this unused import.(´ŸÈüÿÿÿÿ8¼°ŸåŞ1
+qkotlin:S3776D"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(ÃÂ¼‡8Á°ŸåŞ1

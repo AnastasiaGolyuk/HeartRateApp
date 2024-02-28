@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,7 +61,7 @@ fun WorkoutScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    modifier = Modifier.fillMaxHeight(0.27f),
+                    modifier = Modifier.fillMaxHeight(0.26f),
                     painter = painterResource(id = R.drawable.workout_img),
                     contentDescription = "",
                     contentScale = ContentScale.FillHeight
@@ -95,31 +96,37 @@ fun WorkoutScreen() {
                 )
             }
         }
-        ElevatedButton(
-            onClick = {
+        Column(modifier = Modifier
+            .align(Alignment.BottomCenter)) {
 
-            },
-            modifier = Modifier
-                .padding(bottom = 50.dp)
-                .height(48.dp)
-                .align(Alignment.BottomCenter)
-                .shadow(
-                    elevation = 10.dp,
-                    shape = RoundedCornerShape(50.dp),
-                    clip = true,
-                    ambientColor = Color(0xFFCC0909),
-                    spotColor = Color(0xFFCC0909),
-                ),
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = RedMain,
-                disabledContainerColor = RedMain.copy(alpha = 0.5f),
-                disabledContentColor = RedMain.copy(alpha = 0.5f),
-            )
-        ) {
-            Text(
-                text = "Start workout",
-                style = MaterialTheme.typography.titleSmall,
-                color = Color.White
+            ElevatedButton(
+                onClick = {
+
+                },
+                modifier = Modifier
+                    .height(48.dp)
+                    .shadow(
+                        elevation = 10.dp,
+                        shape = RoundedCornerShape(50.dp),
+                        clip = true,
+                        ambientColor = Color(0xFFCC0909),
+                        spotColor = Color(0xFFCC0909),
+                    ),
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = RedMain,
+                    disabledContainerColor = RedMain.copy(alpha = 0.5f),
+                    disabledContentColor = RedMain.copy(alpha = 0.5f),
+                )
+            ) {
+                Text(
+                    text = "Start workout",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .fillMaxHeight(0.065f)
             )
         }
     }

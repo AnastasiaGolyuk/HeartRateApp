@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import test.createx.heartrateapp.presentation.heart_rate.HeartRateScreen
+import test.createx.heartrateapp.presentation.heart_rate.HeartRateViewModel
 import test.createx.heartrateapp.presentation.profile.ProfileScreen
 import test.createx.heartrateapp.presentation.profile.ProfileViewModel
 import test.createx.heartrateapp.presentation.report.ReportScreen
@@ -16,7 +17,6 @@ import test.createx.heartrateapp.presentation.workout.WorkoutScreen
 
 @Composable
 fun HomeNavGraph(
-//    startDestination: String,
     navController: NavHostController,
     onComposing: (TopAppBarNavigationState) -> Unit
 ) {
@@ -27,10 +27,8 @@ fun HomeNavGraph(
     ) {
 
             composable(route = Route.HeartRateScreen.route) {
-//                val viewModel: HeartRateViewModel = hiltViewModel()
-                HeartRateScreen(
-//                    viewModel = viewModel
-                )
+                val viewModel: HeartRateViewModel = hiltViewModel()
+                HeartRateScreen(viewModel = viewModel, onComposing = onComposing)
             }
             composable(route = Route.ReportScreen.route) {
                 ReportScreen()

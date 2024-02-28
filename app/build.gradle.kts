@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "test.createx.heartrateapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -52,6 +52,8 @@ android {
     }
 }
 
+
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.10")
@@ -63,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.compose.material:material:1.6.1")
+    implementation("androidx.databinding:baseLibrary:3.2.0-alpha11")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -92,7 +95,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     //ComposeSensors
-    implementation("com.mutualmobile:composesensors:1.1.2")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.8")
+    implementation("com.github.kibotu:Heart-Rate-Ometer:-SNAPSHOT")
 
     //Lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")

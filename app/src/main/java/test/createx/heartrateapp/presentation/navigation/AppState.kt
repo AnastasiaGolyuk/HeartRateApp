@@ -23,13 +23,20 @@ class AppState @Inject constructor(
     )
     private val appBarsRoutes = appBarsRoutesList.map { it.route }
 
+    private val appBarIconRoutesList = listOf(
+        Route.HeartRateScreen,
+        Route.ProfileScreen
+    )
+    private val appBarIconRoutes = appBarIconRoutesList.map { it.route }
+
     val shouldShowAppBars: Boolean
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination?.route in appBarsRoutes
 
     val shouldShowTopAppBarIcon: Boolean
         @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination?.route == Route.ProfileScreen.route
+            .currentBackStackEntryAsState().value?.destination?.route in appBarIconRoutes
+
 
     val topBarTitle: String
         @Composable get() {

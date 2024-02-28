@@ -47,7 +47,7 @@ fun ProfileScreen(
 
     val openAlertDialog = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         onComposing(
             TopAppBarNavigationState(
                 action = {
@@ -70,7 +70,6 @@ fun ProfileScreen(
             .background(GreyBg)
     ) {
         if (openAlertDialog.value) {
-
             AlertDialog(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {

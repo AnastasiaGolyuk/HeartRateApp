@@ -1,12 +1,19 @@
 package test.createx.heartrateapp.presentation.heart_rate_measurement
 
 import android.view.SurfaceView
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,13 +43,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.airbnb.lottie.parser.IntegerParser
 import kotlinx.coroutines.delay
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.AlertDialog
 import test.createx.heartrateapp.presentation.common.AnimationLottie
 import test.createx.heartrateapp.presentation.common.CircularProgressIndicator
-import test.createx.heartrateapp.presentation.heart_rate.components.HintBottomSheetDialog
-import test.createx.heartrateapp.presentation.heart_rate.components.StateBottomSheetDialog
+import test.createx.heartrateapp.presentation.heart_rate_measurement.components.StateBottomSheetDialog
+import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreenRateText
@@ -140,40 +149,49 @@ fun HeartRateMeasurementScreen(
                 confirmButtonText = "Close"
             )
         }
-        Box(modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .fillMaxWidth()
-            .padding(bottom = 20.dp)) {
-            AnimationLottie(
-                animationId = R.raw.pulse_indicator,
-                contentScale = ContentScale.FillWidth,
-                isPlaying = !isPaused.value
+        AnimatedContent(targetState = hint.value, transitionSpec = {
+            fadeIn(
+                animationSpec = tween(900),
+            ) togetherWith fadeOut(
+                animationSpec = tween(900)
             )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
+        }, label = "hintContentAnimation") { targetState ->
+            Row(
                 modifier = Modifier
-                    .padding(top = 10.dp)
+                    .padding(top = 10.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .animateContentSize(animationSpec = tween(500))
                     .background(color = RedBg, shape = RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.TopCenter,
             ) {
                 Text(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
+                        .weight(1f)
                         .padding(16.dp),
-                    text = hint.value.hint,
+                    text = targetState.hint,
                     style = MaterialTheme.typography.bodyMedium,
                     color = RedMain,
                     textAlign = TextAlign.Start
                 )
+                if (targetState.image != null) {
+                    Image(
+                        painter = painterResource(id = targetState.image),
+                        contentDescription = "",
+                        modifier = Modifier.padding(0.dp),
+                        contentScale = ContentScale.FillHeight
+                    )
+                }
             }
-            Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+                .padding(horizontal = 16.dp)
+                .align(Alignment.BottomCenter),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 42.dp)
@@ -184,7 +202,7 @@ fun HeartRateMeasurementScreen(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .fillMaxSize(),
-                    positionValue = 100f - (timeLeft.value * 100f / 30f),
+                    positionValue = 100f - (timeLeft.value * 100 / 30f),
                     primaryColor = RedProgressbar,
                     secondaryColor = GreyProgressbar,
                 )
@@ -254,10 +272,25 @@ fun HeartRateMeasurementScreen(
 
                 }
             }
+            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 30.dp)
+            ) {
+                AnimationLottie(
+                    animationId = R.raw.pulse_indicator,
+                    contentScale = ContentScale.FillWidth,
+                    isPlaying = !isPaused.value
+                )
+            }
         }
         if (showSheet) {
             StateBottomSheetDialog(onDismiss = {
                 showSheet = false
+            }, onCreateReport = { userState ->
+                navController.popBackStack()
+                navController.navigate("${Route.HeartRateReportScreen.route}?userState=${userState}&heartRate=${rate.value}")
             })
         }
     }

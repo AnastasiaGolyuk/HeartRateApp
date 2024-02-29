@@ -4,13 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import test.createx.heartrateapp.presentation.heart_rate.HeartRateScreen
 import test.createx.heartrateapp.presentation.heart_rate_measurement.HeartRateMeasurementScreen
 import test.createx.heartrateapp.presentation.heart_rate_measurement.HeartRateMeasurementViewModel
 import test.createx.heartrateapp.presentation.heart_rate_report.HeartRateReportScreen
+import test.createx.heartrateapp.presentation.heart_rate_report.HeartRateReportViewModel
 import test.createx.heartrateapp.presentation.profile.ProfileScreen
 import test.createx.heartrateapp.presentation.profile.ProfileViewModel
 import test.createx.heartrateapp.presentation.report.ReportScreen
@@ -62,7 +65,7 @@ fun NavGraphBuilder.heartRateNavGraph(
 ) {
     navigation(
         startDestination = Route.HeartRateMeasurementScreen.route,
-        route= Graph.HeartMeasurementGraph.route,
+        route = Graph.HeartMeasurementGraph.route,
     )
     {
         composable(route = Route.HeartRateMeasurementScreen.route) {
@@ -73,8 +76,27 @@ fun NavGraphBuilder.heartRateNavGraph(
                 navController = navController
             )
         }
-        composable(route = Route.HeartRateReportScreen.route) {
-            HeartRateReportScreen()
+        composable(route = "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}",
+            arguments = listOf(
+                navArgument("userState") {
+                    type = NavType.StringType
+                    nullable = true
+                },
+                navArgument("heartRate") {
+                    type = NavType.StringType
+                    defaultValue = "0"
+                }
+            )) { backStackEntry ->
+            val userState = backStackEntry.arguments?.getString("userState")
+            val heartRate = backStackEntry.arguments?.getString("heartRate")
+            val viewModel: HeartRateReportViewModel = hiltViewModel()
+            HeartRateReportScreen(
+                viewModel = viewModel,
+                navController = navController,
+                onComposing = onComposing,
+                rate = heartRate!!,
+                userState = userState
+            )
         }
     }
 }

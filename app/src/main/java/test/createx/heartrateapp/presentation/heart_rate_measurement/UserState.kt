@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.heart_rate
+package test.createx.heartrateapp.presentation.heart_rate_measurement
 
 import androidx.annotation.DrawableRes
 import test.createx.heartrateapp.R

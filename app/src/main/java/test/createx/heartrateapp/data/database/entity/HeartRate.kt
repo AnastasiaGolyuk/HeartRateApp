@@ -22,10 +22,10 @@ data class HeartRate(
     val userId: Int,
 
     @ColumnInfo(name = "heart_rate_value")
-    val heartRateValue: String,
+    val heartRateValue: Int,
 
     @ColumnInfo(name = "user_state")
-    val userState: String,
+    val userState: String?,
 
     @ColumnInfo(name = "date_time")
     val dateTime: OffsetDateTime,

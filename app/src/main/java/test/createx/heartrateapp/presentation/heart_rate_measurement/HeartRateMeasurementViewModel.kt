@@ -3,6 +3,7 @@ package test.createx.heartrateapp.presentation.heart_rate_measurement
 import android.view.SurfaceView
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -20,18 +21,12 @@ import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
 import test.createx.heartrateapp.presentation.heart_rate.Hint
 import java.time.OffsetDateTime
 import javax.inject.Inject
+import kotlin.math.round
 
 @HiltViewModel
 class HeartRateMeasurementViewModel @Inject constructor(
     userRepository: UserRepositoryImpl
 ) : ViewModel() {
-
-    private val usersFlow: Flow<List<User>> = userRepository.getAllUsersStream()
-
-    private val user = User(0, "", "", "", "", "", "", "")
-
-    private val _heartRate = mutableStateOf(HeartRate(0, 1, "", "", OffsetDateTime.MIN))
-    val heartRate: State<HeartRate> = _heartRate
 
     private val _subscription: MutableState<CompositeDisposable?> = mutableStateOf(null)
     val subscription: State<CompositeDisposable?> = _subscription
@@ -53,28 +48,33 @@ class HeartRateMeasurementViewModel @Inject constructor(
     private val _timeLeft = mutableFloatStateOf(30f)
     val timeLeft: State<Float> = _timeLeft
 
-    init {
-        viewModelScope.launch {
-            usersFlow.collect { res ->
-                if (res.isNotEmpty()) {
-                    _heartRate.value = _heartRate.value.copy(userId = res[0].id)
-                } else {
-                    userRepository.insertUser(user)
-                }
-            }
-        }
-    }
-
     fun startMeasurement() {
         viewModelScope.launch {
             while (!_isPaused.value) {
                 delay(100)
+                getHintsOnTime()
                 _timeLeft.floatValue -= 0.1f
-                if (_timeLeft.floatValue <= 0){
+                if (_timeLeft.floatValue <= 0) {
                     disposeSubscription()
                     return@launch
                 }
             }
+            if (_isPaused.value) {
+                setHintOnPause()
+            }
+        }
+    }
+
+    private fun getHintsOnTime() {
+        if (_hint.value==_hints[3]){
+            _hint.value = _hints[1]
+            return
+        }
+        val roundedTimeLeft = round(_timeLeft.floatValue * 10 / 10f)
+        if (roundedTimeLeft % 10 == 0f) {
+            _hint.value = _hints[1]
+        } else if (roundedTimeLeft % 5 == 0f) {
+            _hint.value = _hints[2]
         }
     }
 
@@ -98,20 +98,24 @@ class HeartRateMeasurementViewModel @Inject constructor(
             )
         _subscription.value?.add(_bpmUpdates.value!!)
     }
-    
-    fun areBpmUpdatesInited():Boolean{
-        return if (_subscription.value!=null){
-            _subscription.value!!.size() >0
+
+    fun areBpmUpdatesInited(): Boolean {
+        return if (_subscription.value != null) {
+            _subscription.value!!.size() > 0
         } else {
             false
         }
     }
 
-    fun flushMeasurementData(){
+    private fun setHintOnPause() {
+        _hint.value = _hints[3]
+    }
+
+    fun flushMeasurementData() {
         disposeSubscription()
-        _isPaused.value=true
-        _timeLeft.floatValue=30f
-        _rate.value="--"
-        _hint.value=_hints[0]
+        _isPaused.value = true
+        _timeLeft.floatValue = 30f
+        _rate.value = "--"
+        _hint.value = _hints[0]
     }
 }

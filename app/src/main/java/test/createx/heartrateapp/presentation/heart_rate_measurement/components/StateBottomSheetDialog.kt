@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.heart_rate.components
+package test.createx.heartrateapp.presentation.heart_rate_measurement.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
-import test.createx.heartrateapp.presentation.heart_rate.UserState
+import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
@@ -48,11 +48,11 @@ import test.createx.heartrateapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StateBottomSheetDialog(onDismiss: () -> Unit) {
+fun StateBottomSheetDialog(onDismiss: () -> Unit, onCreateReport:(String?)->Unit) {
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val userStateList = UserState.get()
-    var selectedState by remember {
-        mutableStateOf("")
+    var selectedState: String? by remember {
+        mutableStateOf(null)
     }
 
     ModalBottomSheet(
@@ -92,7 +92,6 @@ fun StateBottomSheetDialog(onDismiss: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp,Alignment.CenterHorizontally)
             ) {
                 items(userStateList) { item ->
-
                     OutlinedCard(
                         onClick = { selectedState = item.title },
                         shape = RoundedCornerShape(18.dp),
@@ -133,7 +132,7 @@ fun StateBottomSheetDialog(onDismiss: () -> Unit) {
             Spacer(modifier = Modifier.height(24.dp))
             ElevatedButton(
                 onClick = {
-                    /*TODO*/
+                    onCreateReport(selectedState)
                 },
                 modifier = Modifier
                     .padding(bottom = 50.dp)
@@ -158,13 +157,5 @@ fun StateBottomSheetDialog(onDismiss: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun bottPrev() {
-    HeartRateAppTheme {
-        StateBottomSheetDialog(onDismiss = {})
     }
 }

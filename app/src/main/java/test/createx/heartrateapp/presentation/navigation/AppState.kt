@@ -24,11 +24,11 @@ class AppState @Inject constructor(
     private val appBarsRoutes = appBarsRoutesList.map { it.route }
 
     private val appBarIconRoutesList = listOf(
-        Route.HeartRateMeasurementScreen,
-        Route.HeartRateReportScreen,
-        Route.ProfileScreen
+        Route.HeartRateMeasurementScreen.route,
+        "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}",
+        Route.ProfileScreen.route
     )
-    private val appBarIconRoutes = appBarIconRoutesList.map { it.route }
+    private val appBarIconRoutes = appBarIconRoutesList.map { it }
 
     val shouldShowAppBars: Boolean
         @Composable get() = navController
@@ -46,7 +46,7 @@ class AppState @Inject constructor(
                 Route.WorkoutScreen.route -> "Workout"
                 Route.HeartRateScreen.route -> "Heart rate"
                 Route.HeartRateMeasurementScreen.route -> "Heart rate"
-                Route.HeartRateReportScreen.route -> "Heart rate"
+                "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}" -> "HeartRate"
                 Route.ReportScreen.route -> "My reports"
                 Route.SettingsScreen.route -> "Settings"
                 Route.ProfileScreen.route -> "Profile details"

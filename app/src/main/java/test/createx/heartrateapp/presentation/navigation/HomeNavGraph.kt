@@ -17,6 +17,7 @@ import test.createx.heartrateapp.presentation.heart_rate_report.HeartRateReportV
 import test.createx.heartrateapp.presentation.profile.ProfileScreen
 import test.createx.heartrateapp.presentation.profile.ProfileViewModel
 import test.createx.heartrateapp.presentation.report.ReportScreen
+import test.createx.heartrateapp.presentation.report.ReportViewModel
 import test.createx.heartrateapp.presentation.settings.SettingsScreen
 import test.createx.heartrateapp.presentation.statistics.StatisticsScreen
 import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
@@ -37,7 +38,10 @@ fun HomeNavGraph(
             HeartRateScreen(navController = navController)
         }
         composable(route = Route.ReportScreen.route) {
-            ReportScreen()
+            val viewModel: ReportViewModel = hiltViewModel()
+            ReportScreen(
+                navController = navController, viewModel = viewModel
+            )
         }
         composable(route = Route.StatisticsScreen.route) {
             StatisticsScreen()

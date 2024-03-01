@@ -129,10 +129,6 @@ Tapp/src/main/java/test/createx/heartrateapp/presentation/profile/ProfileViewMod
 wapp/src/main/java/test/createx/heartrateapp/presentation/onboarding_data/components/dropdown_component/ButtonContent.kt,8\1\81b88ea0847a6c146c599de9415b78249647bb7f
 å
 \app/src/main/java/test/createx/heartrateapp/presentation/common/CircularProgressIndicator.kt,0\a\0ab98a747c3b746829730d12121edd5c40a3009c
-ò
-happ/src/main/java/test/createx/heartrateapp/presentation/heart_rate/components/StateBottomSheetDialog.kt,b\e\be63d4b7cb5da97a95c97285033100ec20a5f065
-Ä
-Papp/src/main/java/test/createx/heartrateapp/presentation/heart_rate/UserState.kt,f\5\f544ffc07d456a230091359b6df898021f23c3c6
 ó
 gapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate/components/HintBottomSheetDialog.kt,e\1\e131f6ea795e95d6f2b692a9fca030fcab42ed2c
 Ç
@@ -416,10 +412,6 @@ Q.idea/sonarlint/securityhotspotstore/c/c/ccdc98958071d5e12ce9dc3fea2be1be471730
 Q.idea/sonarlint/securityhotspotstore/e/c/ec4317fc3093e8c354ef226260d7fd566c3957fb,6\6\662f9d912d5502f1ed333db085c4d125e6b0e63b
 w
 G.idea/sonarlint/issuestore/4/1/41d94d542eb07930019955e360e3288fdff2668b,a\f\af145bcd76e1cf9bf01085ec9075257d6de68492
-Å
-Q.idea/sonarlint/securityhotspotstore/e/c/ecc19b7b0d1e962415655a45d5c3e0bc91145296,b\7\b7c6b5ac480e1a9d4d0566f548620883971d10c1
-Ö
-Uapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate/HeartRateEvent.kt,3\4\34099070702233f862036227bfb863ae88ee6711
 ì
 capp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_report/HeartRateReportScreen.kt,b\e\bec3c149953e58a46fce70839c8c365ba5b79191
 {
@@ -430,3 +422,11 @@ papp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_measurement
 mapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_measurement/HeartRateMeasurementScreen.kt,1\d\1df0a215b50d7da19ddf898b70a5e13443cbbef7
 |
 Lapp/src/main/java/test/createx/heartrateapp/presentation/navigation/Graph.kt,f\3\f32b92a956a39fb4618551d7996b4fee37dc2c5e
+§
+tapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_measurement/components/StateBottomSheetDialog.kt,3\4\34c862aa244a308f666325300e43f5b7157884ae
+å
+\app/src/main/java/test/createx/heartrateapp/presentation/heart_rate_measurement/UserState.kt,e\e\ee846b9dc24681fc112f7c446220b26ef8152a23
+ë
+aapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_measurement/HeartRateEvent.kt,6\8\687a249de8285415720eaafdd0c931bd4ddac4a0
+ñ
+fapp/src/main/java/test/createx/heartrateapp/presentation/heart_rate_report/HeartRateReportViewModel.kt,e\9\e975743bc2e5117c053df9b24eb4f3374c6bf869

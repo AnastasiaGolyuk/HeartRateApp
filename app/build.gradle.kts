@@ -101,4 +101,7 @@ dependencies {
     //Lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
 
+    //Custom Toast
+    implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
+
 }

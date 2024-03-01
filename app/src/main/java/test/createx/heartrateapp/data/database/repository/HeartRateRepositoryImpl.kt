@@ -3,6 +3,7 @@ package test.createx.heartrateapp.data.database.repository
 import kotlinx.coroutines.flow.Flow
 import test.createx.heartrateapp.data.database.dao.HeartRateDao
 import test.createx.heartrateapp.data.database.entity.HeartRate
+import java.time.OffsetDateTime
 import javax.inject.Inject
 
 class HeartRateRepositoryImpl @Inject constructor(private val heartRateDao: HeartRateDao){
@@ -10,8 +11,12 @@ class HeartRateRepositoryImpl @Inject constructor(private val heartRateDao: Hear
         return heartRateDao.getHeartRate(id)
     }
 
-    fun getAllHeartRatesStream():Flow<List<HeartRate>> {
-        return heartRateDao.getAllHeartRates()
+    fun getAllHeartRatesStream(userId: Int):Flow<List<HeartRate>> {
+        return heartRateDao.getAllHeartRates(userId)
+    }
+
+    fun getAllPeriodHeartRatesStream(userId: Int, periodStartDate: OffsetDateTime):Flow<List<HeartRate>> {
+        return heartRateDao.getAllPeriodHeartRates(userId,periodStartDate)
     }
 
     suspend fun insertHeartRate(heartRate: HeartRate) {

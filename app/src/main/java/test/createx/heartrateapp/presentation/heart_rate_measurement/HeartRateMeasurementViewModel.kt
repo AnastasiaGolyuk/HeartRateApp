@@ -3,7 +3,6 @@ package test.createx.heartrateapp.presentation.heart_rate_measurement
 import android.view.SurfaceView
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,27 +11,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import net.kibotu.heartrateometer.HeartRateOmeter
-import test.createx.heartrateapp.data.database.entity.HeartRate
-import test.createx.heartrateapp.data.database.entity.User
-import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
 import test.createx.heartrateapp.presentation.heart_rate.Hint
-import java.time.OffsetDateTime
 import javax.inject.Inject
 import kotlin.math.round
 
 @HiltViewModel
-class HeartRateMeasurementViewModel @Inject constructor(
-    userRepository: UserRepositoryImpl
-) : ViewModel() {
+class HeartRateMeasurementViewModel @Inject constructor() : ViewModel() {
 
     private val _subscription: MutableState<CompositeDisposable?> = mutableStateOf(null)
-    val subscription: State<CompositeDisposable?> = _subscription
 
     private val _bpmUpdates: MutableState<Disposable?> = mutableStateOf(null)
-    val bpmUpdates: State<Disposable?> = _bpmUpdates
 
     private val _isPaused = mutableStateOf(true)
     var isPaused: State<Boolean> = _isPaused
@@ -56,6 +46,7 @@ class HeartRateMeasurementViewModel @Inject constructor(
                 _timeLeft.floatValue -= 0.1f
                 if (_timeLeft.floatValue <= 0) {
                     disposeSubscription()
+                    _isPaused.value=true
                     return@launch
                 }
             }
@@ -109,13 +100,5 @@ class HeartRateMeasurementViewModel @Inject constructor(
 
     private fun setHintOnPause() {
         _hint.value = _hints[3]
-    }
-
-    fun flushMeasurementData() {
-        disposeSubscription()
-        _isPaused.value = true
-        _timeLeft.floatValue = 30f
-        _rate.value = "--"
-        _hint.value = _hints[0]
     }
 }

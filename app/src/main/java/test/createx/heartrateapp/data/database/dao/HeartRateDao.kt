@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import test.createx.heartrateapp.data.database.entity.HeartRate
+import java.time.OffsetDateTime
 
 @Dao
 interface HeartRateDao {
@@ -23,6 +24,9 @@ interface HeartRateDao {
     @Query("SELECT * FROM heart_rate WHERE id = :id ")
     fun getHeartRate(id: Int): Flow<HeartRate>
 
-    @Query("SELECT * FROM heart_rate")
-    fun getAllHeartRates(): Flow<List<HeartRate>>
+    @Query("SELECT * FROM heart_rate WHERE user_id = :userId")
+    fun getAllHeartRates(userId: Int): Flow<List<HeartRate>>
+
+    @Query("SELECT * FROM heart_rate WHERE user_id = :userId AND date_time >= :periodStartDate")
+    fun getAllPeriodHeartRates(userId: Int, periodStartDate: OffsetDateTime): Flow<List<HeartRate>>
 }

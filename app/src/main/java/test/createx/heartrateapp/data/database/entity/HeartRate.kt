@@ -4,14 +4,11 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import kotlinx.parcelize.Parcelize
-import test.createx.heartrateapp.data.database.DateTimeTypeConverter
 import java.time.OffsetDateTime
 
 @Parcelize
 @Entity(tableName = "heart_rate")
-@TypeConverters(DateTimeTypeConverter::class)
 data class HeartRate(
 
     @PrimaryKey(autoGenerate = true)
@@ -26,6 +23,9 @@ data class HeartRate(
 
     @ColumnInfo(name = "user_state")
     val userState: String?,
+
+    @ColumnInfo(name = "heart_rate_status")
+    val heartRateStatus: String,
 
     @ColumnInfo(name = "date_time")
     val dateTime: OffsetDateTime,

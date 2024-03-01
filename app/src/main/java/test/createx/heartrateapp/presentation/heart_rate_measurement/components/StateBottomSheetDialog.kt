@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -34,13 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreySubText
-import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 import test.createx.heartrateapp.ui.theme.RedAction
 import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
@@ -48,15 +47,28 @@ import test.createx.heartrateapp.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StateBottomSheetDialog(onDismiss: () -> Unit, onCreateReport:(String?)->Unit) {
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+fun StateBottomSheetDialog(
+    onShowDialogChange: (Boolean) -> Unit,
+    onCreateReport: (String?) -> Unit
+) {
+    val modalBottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = {
+            if (it == SheetValue.Hidden) {
+                onShowDialogChange(true)
+                false
+            } else {
+                true
+            }
+        })
     val userStateList = UserState.get()
     var selectedState: String? by remember {
         mutableStateOf(null)
     }
 
     ModalBottomSheet(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            onShowDialogChange(true)
+        },
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
         containerColor = White
@@ -88,8 +100,8 @@ fun StateBottomSheetDialog(onDismiss: () -> Unit, onCreateReport:(String?)->Unit
             Spacer(modifier = Modifier.height(24.dp))
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp,Alignment.CenterVertically),
-                horizontalArrangement = Arrangement.spacedBy(8.dp,Alignment.CenterHorizontally)
+                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
             ) {
                 items(userStateList) { item ->
                     OutlinedCard(
@@ -106,7 +118,9 @@ fun StateBottomSheetDialog(onDismiss: () -> Unit, onCreateReport:(String?)->Unit
                         )
                     ) {
                         Column(
-                            modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 16.dp),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(
                                 8.dp,
                                 Alignment.CenterVertically

@@ -27,18 +27,17 @@ class HeartRateReportViewModel @Inject constructor(
     private val user = User(0, "", "", "", "", "", "", "")
 
     private val _heartRate =
-        mutableStateOf(HeartRate(0, 1, 0, "", OffsetDateTime.now(ZoneId.systemDefault())))
+        mutableStateOf(HeartRate(0, 1, 0, "", "", OffsetDateTime.now(ZoneId.systemDefault())))
     val heartRate: State<HeartRate> = _heartRate
 
-    private val _heartRateStatuses = listOf("Low rate", "Normal rate", "High rate")
+    private val heartRateStatuses = HeartRateStatus.get()
 
-    private val _normalHints = mutableStateOf(listOf<String>())
+    private var normalHints = mutableStateOf(listOf<String>())
 
-    private val _exerciseHints = mutableStateOf(listOf<String>())
+    private var exerciseHints = mutableStateOf(listOf<String>())
 
-
-    private val _heartRateStatus = mutableStateOf(_heartRateStatuses[1])
-    val heartRateStatus: State<String> = _heartRateStatus
+    private val _heartRateStatus = mutableStateOf(heartRateStatuses[1])
+    val heartRateStatus: State<HeartRateStatus> = _heartRateStatus
 
     private val _heartRateHint = mutableStateOf("")
     val heartRateHint: State<String> = _heartRateHint
@@ -62,66 +61,65 @@ class HeartRateReportViewModel @Inject constructor(
         }
     }
 
-    fun initHintsList(normalHints:List<String>,exerciseHints:List<String>){
-        _normalHints.value=normalHints
-        _exerciseHints.value=exerciseHints
+    fun initHintsList(normalHints: List<String>, exerciseHints: List<String>) {
+        this.normalHints.value = normalHints
+        this.exerciseHints.value = exerciseHints
     }
 
     fun setHeartRateState(heartRateValue: Int, userState: String?) {
-        _heartRate.value =
-            _heartRate.value.copy(heartRateValue = heartRateValue, userState = userState)
         getRateStatus(heartRateValue, userState)
+        _heartRate.value =
+            _heartRate.value.copy(
+                heartRateValue = heartRateValue,
+                userState = userState,
+                heartRateStatus = _heartRateStatus.value.title.substringBefore(' ')
+            )
+
     }
 
     private fun getRateStatus(heartRateValue: Int, userState: String?) {
 
         if (userState == null || userState == UserState.get()[0].title || userState == UserState.get()[1].title) {
             if (heartRateValue < 60) {
-                _heartRateStatus.value = _heartRateStatuses[0]
-                _heartRateHint.value = _normalHints.value[0]
+                _heartRateStatus.value = heartRateStatuses[0]
+                _heartRateHint.value = normalHints.value[0]
                 return
-            }
-            else if (heartRateValue > 100) {
-                _heartRateStatus.value = _heartRateStatuses[2]
-                _heartRateHint.value = _normalHints.value[2]
+            } else if (heartRateValue > 100) {
+                _heartRateStatus.value = heartRateStatuses[2]
+                _heartRateHint.value = normalHints.value[2]
                 return
-            }
-            else {
-                _heartRateStatus.value = _heartRateStatuses[1]
-                _heartRateHint.value = _normalHints.value[1]
+            } else {
+                _heartRateStatus.value = heartRateStatuses[1]
+                _heartRateHint.value = normalHints.value[1]
                 return
             }
         } else {
             if (userState == UserState.get()[2].title) {
                 if (heartRateValue < 60) {
-                    _heartRateStatus.value = _heartRateStatuses[0]
-                    _heartRateHint.value = _normalHints.value[0]
+                    _heartRateStatus.value = heartRateStatuses[0]
+                    _heartRateHint.value = normalHints.value[0]
                     return
-                }
-                else if (heartRateValue > 140) {
-                    _heartRateStatus.value = _heartRateStatuses[2]
-                    _heartRateHint.value = _exerciseHints.value[2]
+                } else if (heartRateValue > 140) {
+                    _heartRateStatus.value = heartRateStatuses[2]
+                    _heartRateHint.value = exerciseHints.value[2]
                     return
-                }
-                else {
-                    _heartRateStatus.value = _heartRateStatuses[1]
-                    _heartRateHint.value = _normalHints.value[1]
+                } else {
+                    _heartRateStatus.value = heartRateStatuses[1]
+                    _heartRateHint.value = normalHints.value[1]
                     return
                 }
             } else {
                 if (heartRateValue < 60) {
-                    _heartRateStatus.value = _heartRateStatuses[0]
-                    _heartRateHint.value = _normalHints.value[0]
+                    _heartRateStatus.value = heartRateStatuses[0]
+                    _heartRateHint.value = normalHints.value[0]
                     return
-                }
-                else if (heartRateValue > 120) {
-                    _heartRateStatus.value = _heartRateStatuses[2]
-                    _heartRateHint.value = _exerciseHints.value[2]
+                } else if (heartRateValue > 120) {
+                    _heartRateStatus.value = heartRateStatuses[2]
+                    _heartRateHint.value = exerciseHints.value[2]
                     return
-                }
-                else {
-                    _heartRateStatus.value = _heartRateStatuses[1]
-                    _heartRateHint.value = _normalHints.value[1]
+                } else {
+                    _heartRateStatus.value = heartRateStatuses[1]
+                    _heartRateHint.value = normalHints.value[1]
                     return
                 }
             }

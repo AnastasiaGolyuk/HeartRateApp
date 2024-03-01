@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HeartRateApp</string>
+
     <string name="normal_low_rate_hint">Your heart rate is Low. Apart from being a highly trained athlete, a slow heart rate is usually caused by an underlying issue. Work with your doctor or another healthcare practitioner to find and treat the cause.</string>
     <string name="normal_normal_rate_hint">Your heart rate is Normal. A typical heart rate in this state is for adults is 60–100 bpm. You can prevent out of normal by doing the following: regular exercise, reducing stress, maintaining a healthy weight, and eating healthy.</string>
     <string name="normal_high_rate_hint">Your heart rate is High. Take a walk outside, ideally in nature. Relaxation exercises such as controlled breathing, meditation. To prevent this condition, practice yoga and stretching.</string>
@@ -7,4 +8,6 @@
     <string name="exercise_normal_rate_hint">Your heart rate is Normal. You can prevent out of normal by doing the following: regular exercise, reducing stress, maintaining a healthy weight, and eating healthy.</string>
     <string name="exercise_high_rate_hint">Your heart rate is High. It\'s advisable to should slow down or stop exercising and discuss it further with your physician or cardiologist. This may be a sign of serious illness.</string>
 
+    <string name="empty_reports_title">"Here you can see your reports.\nTry your first measurement."</string>
+    <string name="empty_statistics_title">"Here you can view your statistics.\nTry the first measurement."</string>
 </resources>

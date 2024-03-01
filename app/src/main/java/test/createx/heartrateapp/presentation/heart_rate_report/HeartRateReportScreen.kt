@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -36,9 +37,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.AlertDialog
 import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
+import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyBg
@@ -46,8 +50,6 @@ import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedBg
 import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.White
-import test.createx.heartrateapp.ui.theme.YellowRateBg
-import test.createx.heartrateapp.ui.theme.YellowRateText
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -59,14 +61,24 @@ fun HeartRateReportScreen(
     userState: String?
 ) {
     val dateTime = viewModel.heartRate.value.dateTime
-    val dateString = dateTime.format(DateTimeFormatter.ofPattern("d MMM, HH:mm"))
+    val dateString = dateTime.format(DateTimeFormatter.ofPattern("MMM d, HH:mm"))
 
-    val normalHints = listOf(stringResource(id = R.string.normal_low_rate_hint),stringResource(id = R.string.normal_normal_rate_hint),stringResource(id = R.string.normal_high_rate_hint))
-    val exerciseHints = listOf(stringResource(id = R.string.exercise_low_rate_hint),stringResource(id = R.string.exercise_normal_rate_hint),stringResource(id = R.string.exercise_high_rate_hint))
+    val normalHints = listOf(
+        stringResource(id = R.string.normal_low_rate_hint),
+        stringResource(id = R.string.normal_normal_rate_hint),
+        stringResource(id = R.string.normal_high_rate_hint)
+    )
+    val exerciseHints = listOf(
+        stringResource(id = R.string.exercise_low_rate_hint),
+        stringResource(id = R.string.exercise_normal_rate_hint),
+        stringResource(id = R.string.exercise_high_rate_hint)
+    )
 
     val scrollState = rememberScrollState()
 
     val openAlertDialog = remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.initHintsList(normalHints, exerciseHints)
@@ -124,14 +136,17 @@ fun HeartRateReportScreen(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
-                    modifier = Modifier.background(YellowRateBg, RoundedCornerShape(10.dp)),
+                    modifier = Modifier.background(
+                        viewModel.heartRateStatus.value.colorBg,
+                        RoundedCornerShape(10.dp)
+                    ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = viewModel.heartRateStatus.value,
+                        text = viewModel.heartRateStatus.value.title,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        color = YellowRateText,
+                        color = viewModel.heartRateStatus.value.colorText,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -213,6 +228,11 @@ fun HeartRateReportScreen(
         ElevatedButton(
             onClick = {
                 viewModel.saveUserHeartRate()
+                coroutineScope.launch {
+                    delay(500)
+                }
+                navController.popBackStack()
+                navController.navigate(Route.ReportScreen.route)
             },
             modifier = Modifier
                 .padding(bottom = 50.dp)

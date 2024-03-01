@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,8 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.airbnb.lottie.parser.IntegerParser
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.AlertDialog
 import test.createx.heartrateapp.presentation.common.AnimationLottie
@@ -63,6 +65,7 @@ import test.createx.heartrateapp.ui.theme.RedProgressbar
 import test.createx.heartrateapp.ui.theme.White
 import kotlin.math.ceil
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeartRateMeasurementScreen(
     viewModel: HeartRateMeasurementViewModel, onComposing: (TopAppBarNavigationState) -> Unit,
@@ -83,7 +86,11 @@ fun HeartRateMeasurementScreen(
         mutableStateOf(null)
     }
 
+    var userState: String? by remember { mutableStateOf("") }
+
     val openAlertDialog = remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         onComposing(
@@ -113,6 +120,15 @@ fun HeartRateMeasurementScreen(
         viewModel.startMeasurement()
     }
 
+    LaunchedEffect(userState) {
+        if (userState != "") {
+            showSheet=false
+            delay(300)
+            navController.popBackStack()
+            navController.navigate("${Route.HeartRateReportScreen.route}?userState=${userState}&heartRate=${rate.value}")
+        }
+    }
+
     DisposableEffect(Unit) {
         onDispose {
             viewModel.disposeSubscription()
@@ -140,8 +156,10 @@ fun HeartRateMeasurementScreen(
             AlertDialog(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
-                    openAlertDialog.value = false
                     viewModel.disposeSubscription()
+                    openAlertDialog.value = false
+                    showSheet = false
+                    coroutineScope.launch { delay(300) }
                     navController.popBackStack()
                 },
                 dialogTitle = "Close the measurement?",
@@ -286,11 +304,13 @@ fun HeartRateMeasurementScreen(
             }
         }
         if (showSheet) {
-            StateBottomSheetDialog(onDismiss = {
+        StateBottomSheetDialog(
+//            showSheet = showSheet,
+            onShowDialogChange = { showDialog ->
+                openAlertDialog.value = showDialog
+            }, onCreateReport = { state ->
+                userState = state
                 showSheet = false
-            }, onCreateReport = { userState ->
-                navController.popBackStack()
-                navController.navigate("${Route.HeartRateReportScreen.route}?userState=${userState}&heartRate=${rate.value}")
             })
         }
     }

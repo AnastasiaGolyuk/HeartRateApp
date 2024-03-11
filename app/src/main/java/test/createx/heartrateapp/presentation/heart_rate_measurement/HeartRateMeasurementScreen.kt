@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,7 +64,6 @@ import test.createx.heartrateapp.ui.theme.RedProgressbar
 import test.createx.heartrateapp.ui.theme.White
 import kotlin.math.ceil
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeartRateMeasurementScreen(
     viewModel: HeartRateMeasurementViewModel, onComposing: (TopAppBarNavigationState) -> Unit,
@@ -220,7 +218,7 @@ fun HeartRateMeasurementScreen(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .fillMaxSize(),
-                    positionValue = 100f - (timeLeft.value * 100 / 30f),
+                    positionValue = 100f - (timeLeft.value * 100 / viewModel.fullCycle),
                     primaryColor = RedProgressbar,
                     secondaryColor = GreyProgressbar,
                 )
@@ -262,7 +260,7 @@ fun HeartRateMeasurementScreen(
                     )
                     .border(
                         width = 2.dp,
-                        color = if (timeLeft.value == 30f) Color.Transparent else if (isPaused.value) RedMain else GreenRateText,
+                        color = if (timeLeft.value == viewModel.fullCycle) Color.Transparent else if (isPaused.value) RedMain else GreenRateText,
                         shape = RoundedCornerShape(50.dp)
                     )
             ) {
@@ -278,7 +276,7 @@ fun HeartRateMeasurementScreen(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = if (ceil(timeLeft.value) == 30f) "Just ${ceil(timeLeft.value).toInt()} seconds" else "${
+                        text = if (ceil(timeLeft.value) == viewModel.fullCycle) "Just ${ceil(timeLeft.value).toInt()} seconds" else "${
                             ceil(
                                 timeLeft.value
                             ).toInt()
@@ -305,7 +303,6 @@ fun HeartRateMeasurementScreen(
         }
         if (showSheet) {
         StateBottomSheetDialog(
-//            showSheet = showSheet,
             onShowDialogChange = { showDialog ->
                 openAlertDialog.value = showDialog
             }, onCreateReport = { state ->

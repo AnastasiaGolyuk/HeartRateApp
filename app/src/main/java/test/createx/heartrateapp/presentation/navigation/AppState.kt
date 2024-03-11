@@ -26,13 +26,17 @@ class AppState @Inject constructor(
     private val appBarIconRoutesList = listOf(
         Route.HeartRateMeasurementScreen.route,
         "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}",
-        Route.ProfileScreen.route
+        Route.ProfileScreen.route,
     )
     private val appBarIconRoutes = appBarIconRoutesList.map { it }
 
-    val shouldShowAppBars: Boolean
+    val shouldShowBottomBar: Boolean
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination?.route in appBarsRoutes
+
+    val shouldShowTopBar: Boolean
+        @Composable get() = navController
+            .currentBackStackEntryAsState().value?.destination?.route != Route.WorkoutExerciseScreen.route
 
     val shouldShowTopAppBarIcon: Boolean
         @Composable get() = navController
@@ -58,7 +62,7 @@ class AppState @Inject constructor(
     private val _topAppBarNavigationState = mutableStateOf(TopAppBarNavigationState())
     val topAppBarNavigationState: State<TopAppBarNavigationState> = _topAppBarNavigationState
 
-    fun onTopAppBarNavStateChange(topAppBarNavigationStateNew: TopAppBarNavigationState){
-        _topAppBarNavigationState.value=topAppBarNavigationStateNew
+    fun onTopAppBarNavStateChange(topAppBarNavigationStateNew: TopAppBarNavigationState) {
+        _topAppBarNavigationState.value = topAppBarNavigationStateNew
     }
 }

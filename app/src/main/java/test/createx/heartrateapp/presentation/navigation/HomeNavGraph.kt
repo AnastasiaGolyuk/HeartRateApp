@@ -20,8 +20,11 @@ import test.createx.heartrateapp.presentation.report.ReportScreen
 import test.createx.heartrateapp.presentation.report.ReportViewModel
 import test.createx.heartrateapp.presentation.settings.SettingsScreen
 import test.createx.heartrateapp.presentation.statistics.StatisticsScreen
+import test.createx.heartrateapp.presentation.statistics.StatisticsViewModel
 import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.presentation.workout.WorkoutScreen
+import test.createx.heartrateapp.presentation.workout_exercises.WorkoutExerciseScreen
+import test.createx.heartrateapp.presentation.workout_exercises.WorkoutExerciseViewModel
 
 @Composable
 fun HomeNavGraph(
@@ -34,6 +37,7 @@ fun HomeNavGraph(
         startDestination = Route.HeartRateScreen.route
     ) {
         heartRateNavGraph(navController = navController, onComposing = onComposing)
+        workoutNavGraph(navController = navController, onComposing = onComposing)
         composable(route = Route.HeartRateScreen.route) {
             HeartRateScreen(navController = navController)
         }
@@ -44,7 +48,8 @@ fun HomeNavGraph(
             )
         }
         composable(route = Route.StatisticsScreen.route) {
-            StatisticsScreen()
+            val viewModel: StatisticsViewModel = hiltViewModel()
+            StatisticsScreen(navController = navController, viewModel = viewModel)
         }
         composable(route = Route.SettingsScreen.route) {
             SettingsScreen(navController = navController)
@@ -58,7 +63,7 @@ fun HomeNavGraph(
             )
         }
         composable(route = Route.WorkoutScreen.route) {
-            WorkoutScreen()
+            WorkoutScreen(navController=navController)
         }
     }
 }
@@ -101,6 +106,22 @@ fun NavGraphBuilder.heartRateNavGraph(
                 rate = heartRate!!,
                 userState = userState
             )
+        }
+    }
+}
+
+fun NavGraphBuilder.workoutNavGraph(
+    navController: NavHostController,
+    onComposing: (TopAppBarNavigationState) -> Unit
+) {
+    navigation(
+        startDestination = Route.WorkoutExerciseScreen.route,
+        route = Graph.WorkoutGraph.route,
+    )
+    {
+        composable(route = Route.WorkoutExerciseScreen.route) {
+            val viewModel: WorkoutExerciseViewModel = hiltViewModel()
+            WorkoutExerciseScreen(navController = navController, viewModel = viewModel)
         }
     }
 }

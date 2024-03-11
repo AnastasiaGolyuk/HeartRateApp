@@ -10,4 +10,16 @@
 
     <string name="empty_reports_title">"Here you can see your reports.\nTry your first measurement."</string>
     <string name="empty_statistics_title">"Here you can view your statistics.\nTry the first measurement."</string>
+
+    <string name="squats_workout_title">Squats</string>
+    <string name="squats_workout_description">1. Stand with feet shoulder-width apart and hands clasped in front of chest, elbows slightly bent.\n2. Brace abs, push hips back, and bend knees, lowering body into a squat. Pause at the bottom, then push back up to the starting position.</string>
+    <string name="plank_workout_title">Forearm Plank</string>
+    <string name="plank_workout_description">1. Lie face down with your legs extended, elbows bent directly under your shoulders, and your palms flat on the floor.\n2. Engage your abs, press the floor away from yourself with your forearms. You should form a straight line from shoulders to heels.</string>
+    <string name="rope_workout_title">Jump Rope</string>
+    <string name="rope_workout_description">Swing the rope over your head and jump as it passes your feet. You don\'t have to jump high, just enough to clear the rope. Land evenly on the balls of both feet.</string>
+    <string name="step_workout_title">Step-Ups</string>
+    <string name="step_workout_description">To begin, stand behind your platform. Place one foot on top of the surface, pressing into your heel as you step up. Bring your other foot up to meet the first on top of the platform. Return your second foot to the floor, followed by the first.</string>
+    <string name="biceps_workout_title">Biceps Curl</string>
+    <string name="biceps_workout_description">1. Stand with your feet shoulder-width apart and a dumbbell in each hand.\n2. Turn your arms to face forward and bend your elbows to move the dumbbells up toward your shoulders. Slowly raise both dumbbells up, after slowly lower the dumbbells.</string>
+
 </resources>

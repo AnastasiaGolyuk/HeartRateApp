@@ -35,7 +35,9 @@ class HeartRateMeasurementViewModel @Inject constructor() : ViewModel() {
     private val _hint = mutableStateOf(_hints[0])
     val hint: State<Hint> = _hint
 
-    private val _timeLeft = mutableFloatStateOf(30f)
+    val fullCycle = 30f
+
+    private val _timeLeft = mutableFloatStateOf(fullCycle)
     val timeLeft: State<Float> = _timeLeft
 
     fun startMeasurement() {

@@ -28,18 +28,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import test.createx.heartrateapp.R
+import test.createx.heartrateapp.presentation.navigation.Graph
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyBg
 import test.createx.heartrateapp.ui.theme.GreySubText
-import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.White
 
 @Composable
-fun WorkoutScreen() {
+fun WorkoutScreen(navController:NavController) {
 
     Box(
         modifier = Modifier
@@ -101,7 +101,8 @@ fun WorkoutScreen() {
 
             ElevatedButton(
                 onClick = {
-
+                    navController.popBackStack()
+                    navController.navigate(Graph.WorkoutGraph.route)
                 },
                 modifier = Modifier
                     .height(48.dp)
@@ -129,13 +130,5 @@ fun WorkoutScreen() {
                     .fillMaxHeight(0.065f)
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun WorkoutScreenPrev() {
-    HeartRateAppTheme {
-        WorkoutScreen()
     }
 }

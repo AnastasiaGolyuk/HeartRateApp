@@ -101,7 +101,17 @@ dependencies {
     //Lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
 
-    //Custom Toast
-    implementation("com.github.tfaki:ComposableSweetToast:1.0.1")
+    //Charts
+    implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.9")
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.9")
+    // Houses the core logic for charts and other elements. Included in all other modules.
+    implementation("com.patrykandpatrick.vico:core:2.0.0-alpha.9")
+
+    implementation("com.github.madrapps:plot:0.1.1")
+
+    implementation("co.yml:ycharts:2.0.0")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

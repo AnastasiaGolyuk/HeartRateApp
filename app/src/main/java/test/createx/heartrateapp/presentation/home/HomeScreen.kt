@@ -36,7 +36,14 @@ fun HomeScreen(isFirstEnter: Boolean) {
 
     val bottomBarOffset: State<Dp> =
         animateDpAsState(
-            targetValue = if (appState.shouldShowAppBars) 0.dp else 64.dp,
+            targetValue = if (appState.shouldShowBottomBar) 0.dp else 64.dp,
+            animationSpec = tween(durationMillis = 500, easing = LinearEasing),
+            label = "bottomBarAnimation"
+        )
+
+    val topBarOffset: State<Dp> =
+        animateDpAsState(
+            targetValue = if (appState.shouldShowTopBar) 0.dp else (-56).dp,
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
             label = "bottomBarAnimation"
         )
@@ -45,7 +52,7 @@ fun HomeScreen(isFirstEnter: Boolean) {
         mutableStateOf(!isFirstEnter)
     }
 
-    LaunchedEffect(appState.shouldShowAppBars) {
+    LaunchedEffect(appState.shouldShowBottomBar) {
         delay(500)
         shouldPutOffset = true
     }
@@ -57,14 +64,15 @@ fun HomeScreen(isFirstEnter: Boolean) {
                 title = appState.topBarTitle,
                 shouldShowNavigationButton = appState.shouldShowTopAppBarIcon,
                 iconRes = appState.topAppBarNavigationState.value.iconRes,
-                action = appState.topAppBarNavigationState.value.action
+                action = appState.topAppBarNavigationState.value.action,
+                offset = topBarOffset.value
             )
         },
         content = { paddingValues ->
             Box(
                 modifier = Modifier
                     .padding(
-                        top = paddingValues.calculateTopPadding(),
+                        top = paddingValues.calculateTopPadding() + topBarOffset.value,
                         bottom = if (!shouldPutOffset)
                             paddingValues.calculateBottomPadding()
                         else

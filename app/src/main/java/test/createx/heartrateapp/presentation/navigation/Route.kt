@@ -28,4 +28,6 @@ sealed class Route(
     data object ProfileScreen : Route(route = "profileScreen")
 
     data object WorkoutScreen : Route(route = "workoutScreen")
+
+    data object WorkoutExerciseScreen : Route(route = "workoutExerciseScreen")
 }

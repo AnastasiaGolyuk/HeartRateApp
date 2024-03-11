@@ -16,7 +16,7 @@ fun AlertDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
-    dialogText: String,
+    dialogText: String?=null,
     confirmButtonText: String
 ) {
     AlertDialog(
@@ -30,12 +30,14 @@ fun AlertDialog(
             )
         },
         text = {
-            Text(
-                text = dialogText,
-                style = MaterialTheme.typography.bodySmall,
-                color = GreySubText,
-                textAlign = TextAlign.Start
-            )
+            if (dialogText != null) {
+                Text(
+                    text = dialogText,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = GreySubText,
+                    textAlign = TextAlign.Start
+                )
+            }
         },
         onDismissRequest = {
             onDismissRequest()
@@ -46,7 +48,11 @@ fun AlertDialog(
                     onConfirmation()
                 }
             ) {
-                Text(text = confirmButtonText, style = MaterialTheme.typography.bodyMedium, color = RedMain)
+                Text(
+                    text = confirmButtonText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = RedMain
+                )
             }
         },
         dismissButton = {

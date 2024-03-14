@@ -87,12 +87,12 @@ class HeartRateMeasurementViewModel @Inject constructor() : ViewModel() {
             }.bpmUpdates(surfaceView = surfaceView)
             .subscribe(
                 { bpm: HeartRateOmeter.Bpm? -> _rate.value = bpm?.value.toString() },
-                { it -> println("${it.message}") }
+                {  println("${it.message}") }
             )
         _subscription.value?.add(_bpmUpdates.value!!)
     }
 
-    fun areBpmUpdatesInited(): Boolean {
+    fun areBpmUpdatesInitialized(): Boolean {
         return if (_subscription.value != null) {
             _subscription.value!!.size() > 0
         } else {

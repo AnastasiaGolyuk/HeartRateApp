@@ -6,17 +6,20 @@ import test.createx.heartrateapp.data.database.entity.HeartRate
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
-class HeartRateRepositoryImpl @Inject constructor(private val heartRateDao: HeartRateDao){
+class HeartRateRepositoryImpl @Inject constructor(private val heartRateDao: HeartRateDao) {
     fun getUserStream(id: Int): Flow<HeartRate?> {
         return heartRateDao.getHeartRate(id)
     }
 
-    fun getAllHeartRatesStream(userId: Int):Flow<List<HeartRate>> {
+    fun getAllHeartRatesStream(userId: Int): Flow<List<HeartRate>> {
         return heartRateDao.getAllHeartRates(userId)
     }
 
-    fun getAllPeriodHeartRatesStream(userId: Int, periodStartDate: OffsetDateTime):Flow<List<HeartRate>> {
-        return heartRateDao.getAllPeriodHeartRates(userId,periodStartDate)
+    fun getAllPeriodHeartRatesStream(
+        userId: Int,
+        periodStartDate: OffsetDateTime
+    ): Flow<List<HeartRate>> {
+        return heartRateDao.getAllPeriodHeartRates(userId, periodStartDate)
     }
 
     suspend fun insertHeartRate(heartRate: HeartRate) {

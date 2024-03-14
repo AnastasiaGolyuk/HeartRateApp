@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,14 +45,14 @@ fun HintBottomSheetDialog(onDismiss: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
         ) {
             Text(
-                text = "How to measure your heart rate?",
+                text = stringResource(R.string.bottom_sheet_hint_title),
                 modifier = Modifier.padding(horizontal = 16.dp),
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                 color = BlackMain,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Put your finger on the camera lens and flash at the same time and hold it still until the measurement is complete",
+                text = stringResource(R.string.bottom_sheet_hint_description),
                 modifier = Modifier.padding(horizontal = 16.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = GreySubText,
@@ -62,7 +63,9 @@ fun HintBottomSheetDialog(onDismiss: () -> Unit) {
                 .fillMaxHeight(0.6f), contentAlignment = Alignment.TopCenter) {
                 AnimationLottie(
                     animationId = R.raw.scan_hint,
-                    modifier = Modifier.matchParentSize().clipToBounds(),
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clipToBounds(),
                     contentScale = ContentScale.Crop
                 )
             }

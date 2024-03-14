@@ -1,7 +1,5 @@
 package test.createx.heartrateapp.presentation.workout_exercises
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,14 +21,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,8 +35,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
@@ -52,8 +46,6 @@ import test.createx.heartrateapp.presentation.common.AlertDialog
 import test.createx.heartrateapp.presentation.common.LinearProgressIndicator
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.navigation.Route
-import test.createx.heartrateapp.presentation.onboarding_data.OnboardingEvent
-import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import test.createx.heartrateapp.presentation.workout_exercises.components.WorkoutExercisePage
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyProgressbar
@@ -88,7 +80,7 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
         animateFloatAsState(
             targetValue = if (pagerState.currentPage > 0) 1f else 0f,
             animationSpec = tween(1000),
-            label = "backButtonAnimation"
+            label = stringResource(R.string.back_button_animation_label)
         )
 
     Box(
@@ -99,8 +91,10 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
         if (openAlertBackDialog.value) {
             AlertDialog(
                 onDismissRequest = {
-                    viewModel.startExercise()
-                    viewModel.startMeasurement()
+                    if (viewModel.timeLeft.value != viewModel.fullCycle) {
+                        viewModel.startExercise()
+                        viewModel.startMeasurement()
+                    }
                     openAlertBackDialog.value = false
                 },
                 onConfirmation = {
@@ -113,27 +107,30 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
                         )
                     }
                 },
-                dialogTitle = "Return to the previous exercise?",
-                confirmButtonText = "Return"
+                dialogTitle = stringResource(R.string.return_alert_dialog_title),
+                confirmButtonText = stringResource(R.string.return_alert_dialog_button_text)
             )
         }
         if (openAlertStopDialog.value) {
             AlertDialog(
                 onDismissRequest = {
-                    viewModel.startExercise()
-                    viewModel.startMeasurement()
+                    if (viewModel.timeLeft.value != viewModel.fullCycle) {
+                        viewModel.startExercise()
+                        viewModel.startMeasurement()
+                    }
                     openAlertStopDialog.value = false
                 },
                 onConfirmation = {
                     openAlertStopDialog.value = false
                     coroutineScope.launch {
                         delay(200)
+                        navController.popBackStack()
                         navController.navigate(Route.WorkoutScreen.route)
                     }
                 },
-                dialogTitle = "Stop the workout?",
-                dialogText = "Progress will be reset, all workout will begin again",
-                confirmButtonText = "Stop"
+                dialogTitle = stringResource(R.string.stop_alert_dialog_title),
+                dialogText = stringResource(R.string.stop_alert_dialog_text),
+                confirmButtonText = stringResource(R.string.stop_alert_dialog_button_text)
             )
         }
         Column {
@@ -156,7 +153,7 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.return_icon),
-                        contentDescription = "Go back",
+                        contentDescription = stringResource(R.string.go_back_icon_description),
                         tint = BlackMain
                     )
                 }
@@ -167,7 +164,7 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
                     viewModel.pauseMeasurement()
                 }, content = {
                     Text(
-                        text = "Stop",
+                        text = stringResource(R.string.stop_alert_dialog_button_text),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = GreySubText
@@ -203,7 +200,7 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
                     color = BlackMain
                 )
                 Text(
-                    text = "sec to complete",
+                    text = stringResource(R.string.workout_timer_text),
                     modifier = Modifier.padding(bottom = 4.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = GreySubText
@@ -230,6 +227,7 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
                     viewModel.restartTimer()
                     scope.launch {
                         if (pagerState.currentPage == 4) {
+                            navController.popBackStack()
                             navController.navigate(Route.WorkoutScreen.route)
                         } else {
                             pagerState.animateScrollToPage(
@@ -260,7 +258,10 @@ fun WorkoutExerciseScreen(navController: NavController, viewModel: WorkoutExerci
             )
         ) {
             Text(
-                text = if (isPaused.value && timeLeft.value == viewModel.fullCycle) "Start exercise" else "Next exercise",
+                text = if (isPaused.value && timeLeft.value == viewModel.fullCycle)
+                    stringResource(R.string.start_exercise_text)
+                else
+                    stringResource(R.string.next_exercise_text),
                 style = MaterialTheme.typography.titleSmall,
                 color = Color.White
             )

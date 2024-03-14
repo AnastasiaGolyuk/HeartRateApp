@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -39,11 +40,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import co.yml.charts.common.extensions.isNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import test.createx.heartrateapp.R
@@ -102,7 +105,7 @@ fun HeartRateMeasurementScreen(
     }
 
     LaunchedEffect(previewView) {
-        if (previewView != null && !viewModel.areBpmUpdatesInited()) {
+        if (previewView.isNotNull() && !viewModel.areBpmUpdatesInitialized()) {
             delay(800)
             viewModel.initBpmUpdates(previewView!!)
         }
@@ -160,9 +163,9 @@ fun HeartRateMeasurementScreen(
                     coroutineScope.launch { delay(300) }
                     navController.popBackStack()
                 },
-                dialogTitle = "Close the measurement?",
-                dialogText = "The measured data will not be saved",
-                confirmButtonText = "Close"
+                dialogTitle = stringResource(R.string.measurements_alert_dialog_title),
+                dialogText = stringResource(R.string.measurements_alert_dialog_description),
+                confirmButtonText = stringResource(id = R.string.close_icon_description)
             )
         }
         AnimatedContent(targetState = hint.value, transitionSpec = {
@@ -171,7 +174,7 @@ fun HeartRateMeasurementScreen(
             ) togetherWith fadeOut(
                 animationSpec = tween(900)
             )
-        }, label = "hintContentAnimation") { targetState ->
+        }, label = stringResource(R.string.hint_content_animation_label)) { targetState ->
             Row(
                 modifier = Modifier
                     .padding(top = 10.dp, start = 16.dp, end = 16.dp)
@@ -181,10 +184,9 @@ fun HeartRateMeasurementScreen(
                     .background(color = RedBg, shape = RoundedCornerShape(10.dp)),
             ) {
                 Text(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                         .padding(16.dp),
-                    text = targetState.hint,
+                    text = stringResource(id = targetState.hint),
                     style = MaterialTheme.typography.bodyMedium,
                     color = RedMain,
                     textAlign = TextAlign.Start
@@ -192,8 +194,8 @@ fun HeartRateMeasurementScreen(
                 if (targetState.image != null) {
                     Image(
                         painter = painterResource(id = targetState.image),
-                        contentDescription = "",
-                        modifier = Modifier.padding(0.dp),
+                        contentDescription = stringResource(R.string.hint_image_description),
+                        modifier = Modifier.padding(0.dp).height(84.dp),
                         contentScale = ContentScale.FillHeight
                     )
                 }
@@ -231,7 +233,7 @@ fun HeartRateMeasurementScreen(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.heart_rate),
-                        contentDescription = "",
+                        contentDescription = stringResource(id = R.string.heart_icon_description),
                         modifier = Modifier
                             .fillMaxSize(0.34f)
                     )
@@ -243,7 +245,7 @@ fun HeartRateMeasurementScreen(
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "bmp",
+                            text = stringResource(id = R.string.bpm_title),
                             style = MaterialTheme.typography.bodyMedium,
                             color = GreySubText,
                             textAlign = TextAlign.Center
@@ -270,17 +272,20 @@ fun HeartRateMeasurementScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = "Measurement time:",
+                        text = stringResource(id = R.string.measurement_time_text),
                         style = MaterialTheme.typography.bodySmall,
                         color = BlackMain,
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = if (ceil(timeLeft.value) == viewModel.fullCycle) "Just ${ceil(timeLeft.value).toInt()} seconds" else "${
-                            ceil(
+                        text = if (ceil(timeLeft.value) == viewModel.fullCycle) stringResource(
+                            R.string.measurement_time_init_text,
+                            ceil(timeLeft.value).toInt()
+                        ) else stringResource(
+                            R.string.measurement_time_left_text, ceil(
                                 timeLeft.value
                             ).toInt()
-                        } seconds left",
+                        ),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = RedMain,
                         textAlign = TextAlign.Center

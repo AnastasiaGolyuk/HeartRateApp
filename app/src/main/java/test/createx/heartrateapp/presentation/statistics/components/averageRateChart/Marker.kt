@@ -1,10 +1,8 @@
-package test.createx.heartrateapp.presentation.statistics.components
+package test.createx.heartrateapp.presentation.statistics.components.averageRateChart
 
-import android.graphics.Typeface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.sourceInformationMarkerStart
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
@@ -89,33 +87,12 @@ internal fun rememberSelectedMarker(
     return remember(label, labelPosition, indicator, guideline) {
         object : MarkerComponent(label, labelPosition, indicator, guideline) {
 
-
             init {
                 indicatorSizeDp = 24f
                 indicatorRearComponent.color = YellowRateText.toArgb()
                 indicatorCenterComponent.color = White.toArgb()
-//                indicatorCenterComponent.
                 indicatorFrontComponent.color = YellowRateText.toArgb()
-
-//                onApplyEntryColor = { entryColor ->
-//                    indicatorFrontComponent.color =
-//                        entryColor
-//                    with(indicatorCenterComponent) {
-//                        color = entryColor
-//                        setShadow(
-//                            radius = INDICATOR_CENTER_COMPONENT_SHADOW_RADIUS,
-//                            color = entryColor
-//                        )
-//                    }
-//                }
-//                indicatorFrontComponent.color = YellowRateText.toArgb()
-
-
             }
-
         }
     }
 }
-
-
-private const val INDICATOR_CENTER_COMPONENT_SHADOW_RADIUS = 12f

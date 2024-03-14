@@ -1,19 +1,20 @@
 package test.createx.heartrateapp.presentation.heart_rate
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import test.createx.heartrateapp.R
 
 data class Hint(
-    val hint: String,
+    @StringRes val hint: Int,
     @DrawableRes val image: Int? = null,
 ) {
     companion object {
         fun get() = listOf(
-            Hint(hint = "Relax, don't control your breathing. Press the button to start the measurement"),
-            Hint(hint = "Relax your hand and fingers, don't control your breathing"),
-            Hint(hint = "We recommend taking measurements daily to get a more complete picture of your condition"),
+            Hint(hint = R.string.hint_intro_text),
+            Hint(hint = R.string.hint_first_text),
+            Hint(hint = R.string.hint_second_text),
             Hint(
-                hint = "Put your finger on the camera lens and flash at the same time and continue measuring",
+                hint = R.string.hint_measurements_text,
                 image = R.drawable.hint_img
             )
         )

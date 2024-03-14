@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.Picker
@@ -66,7 +67,7 @@ fun ExpandablePickerButton(
                 } else {
                     Icon(
                         painter = painterResource(id = R.drawable.drop_down_icon),
-                        contentDescription = "Drop down",
+                        contentDescription = stringResource(R.string.drop_down_icon_description),
                         tint = RedAction
                     )
                 }

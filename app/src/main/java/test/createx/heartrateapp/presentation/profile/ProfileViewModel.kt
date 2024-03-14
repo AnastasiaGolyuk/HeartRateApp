@@ -1,29 +1,40 @@
 package test.createx.heartrateapp.presentation.profile
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
 import test.createx.heartrateapp.data.database.entity.User
+import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
+import test.createx.heartrateapp.presentation.common.user.BaseUserViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepositoryImpl
-) : ViewModel() {
+) : BaseUserViewModel(userRepository) {
 
     private val usersFlow: Flow<List<User>> = userRepository.getAllUsersStream()
 
-    private val _user = mutableStateOf(User(0, "", "", "", "", "", "", ""))
-    val user: State<User> = _user
+    private val isExist = mutableStateOf<Boolean?>(null)
 
-    private var isExist: Boolean = false
+    private val _isLoading = mutableStateOf(true)
+    val isLoading : State<Boolean> = _isLoading
+
+    private val _isNameInputVisible = mutableStateOf(false)
+    val isNameInputVisible : State<Boolean> = _isNameInputVisible
+
+    private val _isSexPickerVisible = mutableStateOf(false)
+    val isSexPickerVisible : State<Boolean> = _isSexPickerVisible
+
+    private val _isAgePickerVisible = mutableStateOf(false)
+    val isAgePickerVisible : State<Boolean> = _isAgePickerVisible
+
+    private val _isLifestylePickerVisible = mutableStateOf(false)
+    val isLifestylePickerVisible : State<Boolean> = _isLifestylePickerVisible
 
     private val _areChangesSaved = mutableStateOf(true)
     val areChangesSaved: State<Boolean> = _areChangesSaved
@@ -33,9 +44,10 @@ class ProfileViewModel @Inject constructor(
             usersFlow.collect { res ->
                 if (res.isNotEmpty()) {
                     _user.value = res[0]
-                    isExist = true
-                } else {
-                    _user.value = _user.value.copy(units = units[0])
+                    isExist.value = true
+                }
+                else {
+                    isExist.value=false
                 }
             }
         }
@@ -44,7 +56,7 @@ class ProfileViewModel @Inject constructor(
     fun onEvent(event: ProfileEvent) {
         when (event) {
             ProfileEvent.SaveChanges -> {
-                if (isExist) {
+                if (isExist.value!!) {
                     updateUser(_user.value)
                 } else {
                     addUser(_user.value)
@@ -60,149 +72,101 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun addUser(user: User) {
+    override fun setUnitsList(units: List<String>){
         viewModelScope.launch {
-            userRepository.insertUser(user)
-        }
-    }
-
-    val sex = listOf("She / Her", "He / Him", "They / Them")
-    val age = listOf("Less than 20", "20-29", "30-39", "40-49", "50-59", "More than 60")
-    val lifestyle = listOf("Active", "Moderate", "Sedentary")
-
-    val units = listOf("kg, cm", "lb, ft")
-
-    private val valuesWeightKg: List<String> = (30..200).map { it.toString() }
-    private val valuesHeightCm: List<String> = (90..250).map { it.toString() }
-    private val valuesWeightLb: List<String> = (66..440).map { it.toString() }
-    private val valuesHeightFt: List<String> = getHeightFtList()
-
-    var isNameInputVisible by mutableStateOf(false)
-
-    var isSexPickerVisible by mutableStateOf(false)
-
-    var isAgePickerVisible by mutableStateOf(false)
-
-    var isLifestylePickerVisible by mutableStateOf(false)
-
-    var isWeightPickerVisible by mutableStateOf(false)
-
-    var isHeightPickerVisible by mutableStateOf(false)
-
-    var weightsList by mutableStateOf(valuesWeightKg)
-
-    var heightsList by mutableStateOf(valuesHeightCm)
-
-    private fun getHeightFtList(): List<String> {
-        val list = ArrayList<String>()
-        for (a in 3..8) {
-            for (i in 0..9) {
-                list.add("${a}\'${i}\"")
-                if (a == 8 && i == 3) {
-                    break
-                }
+            while (isExist.value==null){
+                delay(10)
             }
+            super.setUnitsList(units)
+            _areChangesSaved.value = true
+            _isLoading.value=false
         }
-        return list
     }
 
     fun onToggleNameVisibility() {
-        isNameInputVisible = !isNameInputVisible
-        isSexPickerVisible = false
-        isAgePickerVisible = false
-        isLifestylePickerVisible = false
-        isWeightPickerVisible = false
-        isHeightPickerVisible = false
+        _isNameInputVisible.value = !_isNameInputVisible.value
+       _isSexPickerVisible.value = false
+       _isAgePickerVisible.value = false
+       _isLifestylePickerVisible.value = false
+        _isWeightPickerVisible.value = false
+        _isHeightPickerVisible.value = false
     }
 
     fun onToggleSexVisibility() {
-        isSexPickerVisible = !isSexPickerVisible
-        isNameInputVisible = false
-        isAgePickerVisible = false
-        isLifestylePickerVisible = false
-        isWeightPickerVisible = false
-        isHeightPickerVisible = false
+       _isSexPickerVisible.value = !_isSexPickerVisible.value
+       _isNameInputVisible.value = false
+       _isAgePickerVisible.value = false
+       _isLifestylePickerVisible.value = false
+        _isWeightPickerVisible.value = false
+        _isHeightPickerVisible.value = false
     }
 
     fun onToggleAgeVisibility() {
-        isAgePickerVisible = !isAgePickerVisible
-        isNameInputVisible = false
-        isSexPickerVisible = false
-        isLifestylePickerVisible = false
-        isWeightPickerVisible = false
-        isHeightPickerVisible = false
+       _isAgePickerVisible.value = !_isAgePickerVisible.value
+       _isNameInputVisible.value = false
+       _isSexPickerVisible.value = false
+       _isLifestylePickerVisible.value = false
+        _isWeightPickerVisible.value = false
+        _isHeightPickerVisible.value = false
     }
 
     fun onToggleLifestyleVisibility() {
-        isLifestylePickerVisible = !isLifestylePickerVisible
-        isNameInputVisible = false
-        isAgePickerVisible = false
-        isSexPickerVisible = false
-        isWeightPickerVisible = false
-        isHeightPickerVisible = false
+       _isLifestylePickerVisible.value = !_isLifestylePickerVisible.value
+       _isNameInputVisible.value = false
+       _isAgePickerVisible.value = false
+       _isSexPickerVisible.value = false
+        _isWeightPickerVisible.value = false
+        _isHeightPickerVisible.value = false
     }
 
-    fun onToggleWeightVisibility() {
-        isWeightPickerVisible = !isWeightPickerVisible
-        isNameInputVisible = false
-        isAgePickerVisible = false
-        isSexPickerVisible = false
-        isLifestylePickerVisible = false
-        isHeightPickerVisible = false
+    override fun onToggleWeightVisibility() {
+        super.onToggleWeightVisibility()
+       _isNameInputVisible.value = false
+       _isAgePickerVisible.value = false
+       _isSexPickerVisible.value = false
+       _isLifestylePickerVisible.value = false
     }
 
-    fun onToggleHeightVisibility() {
-        isHeightPickerVisible = !isHeightPickerVisible
-        isNameInputVisible = false
-        isAgePickerVisible = false
-        isSexPickerVisible = false
-        isLifestylePickerVisible = false
-        isWeightPickerVisible = false
+    override fun onToggleHeightVisibility() {
+        super.onToggleHeightVisibility()
+       _isNameInputVisible.value = false
+       _isAgePickerVisible.value = false
+       _isSexPickerVisible.value = false
+       _isLifestylePickerVisible.value = false
     }
 
-    fun onNameChange(name: String) {
+    override fun onNameChange(name: String) {
+        super.onNameChange(name)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(name = name)
     }
 
-    fun onSexChange(sex: String) {
+    override fun onSexChange(sex: String) {
+        super.onSexChange(sex)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(sex = sex)
     }
 
-    fun onAgeChange(age: String) {
+    override fun onAgeChange(age: String) {
+        super.onAgeChange(age)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(age = age)
     }
 
-    fun onLifestyleChange(lifestyle: String) {
+    override fun onLifestyleChange(lifestyle: String) {
+        super.onLifestyleChange(lifestyle)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(lifestyle = lifestyle)
     }
 
-    fun onWeightChange(weight: String) {
+    override fun onWeightChange(weight: String) {
+        super.onWeightChange(weight)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(weight = weight)
     }
 
-    fun onHeightChange(height: String) {
+    override fun onHeightChange(height: String) {
+        super.onHeightChange(height)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(height = height)
     }
 
-    fun onUnitsChange(units: String) {
+    override fun onUnitsChange(units: String) {
+        super.onUnitsChange(units)
         _areChangesSaved.value = false
-        _user.value = _user.value.copy(units = units)
-        if (units == this.units[1]) {
-            weightsList = valuesWeightLb
-            heightsList = valuesHeightFt
-        } else {
-            weightsList = valuesWeightKg
-            heightsList = valuesHeightCm
-        }
-        onWeightChange("")
-        onHeightChange("")
-        if (isHeightPickerVisible) onToggleHeightVisibility()
-        if (isWeightPickerVisible) onToggleWeightVisibility()
     }
 }

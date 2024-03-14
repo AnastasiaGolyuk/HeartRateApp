@@ -6,7 +6,7 @@ import test.createx.heartrateapp.data.database.entity.User
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) {
-     fun getUserStream(id: Int): Flow<User?> {
+    fun getUserStream(id: Int): Flow<User?> {
         return userDao.getUser(id)
     }
 
@@ -14,15 +14,15 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) {
         return userDao.getAllUsers()
     }
 
-     suspend fun insertUser(user: User) {
+    suspend fun insertUser(user: User) {
         userDao.insert(user)
     }
 
-     suspend fun deleteUser(user: User) {
+    suspend fun deleteUser(user: User) {
         userDao.delete(user)
     }
 
-     suspend fun updateUser(user: User) {
-       userDao.update(user)
+    suspend fun updateUser(user: User) {
+        userDao.update(user)
     }
 }

@@ -31,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.common.PageIndicator
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.presentation.onboarding.Page
@@ -118,7 +120,10 @@ fun OnboardingScreenContent(
                     )
                 ) {
                     Text(
-                        text = if (pagerState.currentPage == 0) "Continue" else "Get started",
+                        text = if (pagerState.currentPage == 0)
+                            stringResource(id = R.string.continue_button_text)
+                        else
+                            stringResource(id = R.string.get_started_button_text),
                         style = MaterialTheme.typography.titleSmall,
                         color = Color.White
                     )

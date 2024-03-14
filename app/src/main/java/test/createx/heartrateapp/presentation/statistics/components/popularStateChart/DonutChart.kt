@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.statistics.components
+package test.createx.heartrateapp.presentation.statistics.components.popularStateChart
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable

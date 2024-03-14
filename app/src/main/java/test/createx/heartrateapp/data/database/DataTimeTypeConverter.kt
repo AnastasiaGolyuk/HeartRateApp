@@ -1,6 +1,5 @@
 package test.createx.heartrateapp.data.database
 
-
 import androidx.room.TypeConverter
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter

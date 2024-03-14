@@ -26,13 +26,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedMain
 
 @Composable
-fun BoxScope.EmptyDataScreen(imageRes: Int, titleRes: Int,
-                             navController: NavController
+fun BoxScope.EmptyDataScreen(
+    imageRes: Int, titleRes: Int,
+    navController: NavController
 ) {
 
     Column(
@@ -46,7 +48,7 @@ fun BoxScope.EmptyDataScreen(imageRes: Int, titleRes: Int,
             Image(
                 modifier = Modifier.size(310.dp),
                 painter = painterResource(id = imageRes),
-                contentDescription = "",
+                contentDescription = stringResource(R.string.empty_data_image_description),
             )
             Text(
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -79,7 +81,7 @@ fun BoxScope.EmptyDataScreen(imageRes: Int, titleRes: Int,
         )
     ) {
         Text(
-            text = "Go to measurement",
+            text = stringResource(R.string.empty_statistics_button_text),
             style = MaterialTheme.typography.titleSmall,
             color = Color.White
         )

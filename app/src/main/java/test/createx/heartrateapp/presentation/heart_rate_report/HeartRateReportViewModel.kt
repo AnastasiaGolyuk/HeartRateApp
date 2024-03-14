@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.yml.charts.common.extensions.isNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -11,7 +12,6 @@ import test.createx.heartrateapp.data.database.entity.HeartRate
 import test.createx.heartrateapp.data.database.entity.User
 import test.createx.heartrateapp.data.database.repository.HeartRateRepositoryImpl
 import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
-import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -30,14 +30,12 @@ class HeartRateReportViewModel @Inject constructor(
         mutableStateOf(HeartRate(0, 1, 0, "", "", OffsetDateTime.now(ZoneId.systemDefault())))
     val heartRate: State<HeartRate> = _heartRate
 
-    private val heartRateStatuses = HeartRateStatus.get()
-
     private var normalHints = mutableStateOf(listOf<String>())
 
     private var exerciseHints = mutableStateOf(listOf<String>())
 
-    private val _heartRateStatus = mutableStateOf(heartRateStatuses[1])
-    val heartRateStatus: State<HeartRateStatus> = _heartRateStatus
+    private val _heartRateStatus = mutableStateOf(HeartRateStatus.get()[0])
+    val heartRateStatus: State<HeartRateStatus?> = _heartRateStatus
 
     private val _heartRateHint = mutableStateOf("")
     val heartRateHint: State<String> = _heartRateHint
@@ -66,64 +64,55 @@ class HeartRateReportViewModel @Inject constructor(
         this.exerciseHints.value = exerciseHints
     }
 
-    fun setHeartRateState(heartRateValue: Int, userState: String?) {
-        getRateStatus(heartRateValue, userState)
+    fun setHeartRateState(
+        heartRateValue: Int,
+        userState: String?,
+        userStatesList: List<String>,
+        heartRateStatuses: List<HeartRateStatus>,
+        heartRatesMap: Map<Int, String>
+    ) {
+        getRateStatus(heartRateValue, userState, userStatesList, heartRateStatuses)
+        val heartRateStatus = heartRatesMap[_heartRateStatus.value.title]
         _heartRate.value =
             _heartRate.value.copy(
                 heartRateValue = heartRateValue,
                 userState = userState,
-                heartRateStatus = _heartRateStatus.value.title.substringBefore(' ')
+                heartRateStatus = if (heartRateStatus.isNotNull()) heartRateStatus!!.substringBefore(' ') else ""
             )
-
     }
 
-    private fun getRateStatus(heartRateValue: Int, userState: String?) {
+    private fun getRateStatus(
+        heartRateValue: Int,
+        userState: String?,
+        userStatesList: List<String>,
+        heartRateStatuses: List<HeartRateStatus>
+    ) {
 
-        if (userState == null || userState == UserState.get()[0].title || userState == UserState.get()[1].title) {
+        val listIndex: Int =
             if (heartRateValue < 60) {
-                _heartRateStatus.value = heartRateStatuses[0]
-                _heartRateHint.value = normalHints.value[0]
-                return
-            } else if (heartRateValue > 100) {
-                _heartRateStatus.value = heartRateStatuses[2]
-                _heartRateHint.value = normalHints.value[2]
-                return
+                0
             } else {
-                _heartRateStatus.value = heartRateStatuses[1]
-                _heartRateHint.value = normalHints.value[1]
-                return
-            }
-        } else {
-            if (userState == UserState.get()[2].title) {
-                if (heartRateValue < 60) {
-                    _heartRateStatus.value = heartRateStatuses[0]
-                    _heartRateHint.value = normalHints.value[0]
-                    return
-                } else if (heartRateValue > 140) {
-                    _heartRateStatus.value = heartRateStatuses[2]
-                    _heartRateHint.value = exerciseHints.value[2]
-                    return
-                } else {
-                    _heartRateStatus.value = heartRateStatuses[1]
-                    _heartRateHint.value = normalHints.value[1]
-                    return
-                }
-            } else {
-                if (heartRateValue < 60) {
-                    _heartRateStatus.value = heartRateStatuses[0]
-                    _heartRateHint.value = normalHints.value[0]
-                    return
-                } else if (heartRateValue > 120) {
-                    _heartRateStatus.value = heartRateStatuses[2]
-                    _heartRateHint.value = exerciseHints.value[2]
-                    return
-                } else {
-                    _heartRateStatus.value = heartRateStatuses[1]
-                    _heartRateHint.value = normalHints.value[1]
-                    return
+                when (userState) {
+                    null, userStatesList[0], userStatesList[1] -> {
+                        if (heartRateValue > 100) 2 else 1
+                    }
+
+                    userStatesList[2] -> {
+                        if (heartRateValue > 140) 2 else 1
+                    }
+
+                    else -> {
+                        if (heartRateValue > 120) 2 else 1
+                    }
                 }
             }
-        }
+
+        _heartRateStatus.value = heartRateStatuses[listIndex]
+        _heartRateHint.value =
+            if (userState == userStatesList[2] || userState == userStatesList[3])
+                exerciseHints.value[listIndex]
+            else
+                normalHints.value[listIndex]
     }
 
     fun saveUserHeartRate() {

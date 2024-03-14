@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.statistics.components
+package test.createx.heartrateapp.presentation.statistics.components.popularStateChart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,14 +14,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,6 +31,7 @@ import test.createx.heartrateapp.ui.theme.White
 
 @Composable
 fun PopularChartComponent(chartDataList: List<DonutChartData>) {
+
     val mostlyState = chartDataList.maxOfOrNull { it.data }
 
     Column(
@@ -45,7 +43,7 @@ fun PopularChartComponent(chartDataList: List<DonutChartData>) {
     ) {
 
         Text(
-            text = "Your popular state",
+            text = stringResource(R.string.popular_state_title),
             style = MaterialTheme.typography.titleSmall,
             color = BlackMain,
             textAlign = TextAlign.Center
@@ -55,25 +53,27 @@ fun PopularChartComponent(chartDataList: List<DonutChartData>) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Box(modifier = Modifier
-                .weight(1f)
-                .aspectRatio(1f)
-                .padding(8.dp), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f)
+                    .padding(8.dp), contentAlignment = Alignment.Center
+            ) {
                 DonutChart(
                     pieDataPoints = chartDataList,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
                 )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Mostly",
+                        text = stringResource(R.string.popular_state_percentage_title),
                         style = MaterialTheme.typography.bodyMedium,
                         color = GreySubText,
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "${(mostlyState!!*100).toInt()}%",
+                        text = "${(mostlyState!! * 100).toInt()}%",
                         modifier = Modifier.padding(bottom = 2.dp),
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                         color = BlackMain,
@@ -87,9 +87,11 @@ fun PopularChartComponent(chartDataList: List<DonutChartData>) {
                     .aspectRatio(1f)
                     .background(color = GreyBg, shape = RoundedCornerShape(10.dp))
                     .padding(vertical = 10.dp, horizontal = 12.dp),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 chartDataList.forEach { data ->
+                    val userStateIcon = UserState.get()
+                        .first { stringResource(id = it.title) == data.userState }.image
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -105,13 +107,13 @@ fun PopularChartComponent(chartDataList: List<DonutChartData>) {
                                 )
                         )
                         Image(
-                            painter = painterResource(id = data.iconRes),
-                            contentDescription = "",
+                            painter = painterResource(id = userStateIcon),
+                            contentDescription = stringResource(R.string.user_state_icon_description),
                             modifier = Modifier.size(24.dp),
                             contentScale = ContentScale.Fit
                         )
                         Text(
-                            text = data.state,
+                            text = data.userState,
                             modifier = Modifier.padding(bottom = 2.dp),
                             style = MaterialTheme.typography.bodyMedium,
                             color = BlackMain,

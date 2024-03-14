@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
@@ -51,7 +52,7 @@ fun TextInputComponent(
     ) {
 
         TextField(
-            placeholder = { Text(text = "Your name") },
+            placeholder = { Text(text = stringResource(R.string.name_placeholder)) },
             value = text,
             onValueChange = {
                 onInput(it)
@@ -65,7 +66,7 @@ fun TextInputComponent(
                 if (isError) {
                     Icon(
                         painter = painterResource(R.drawable.trailing_icon_error),
-                        contentDescription = "error",
+                        contentDescription = stringResource(R.string.error_icon_description),
                         tint = RedAction
                     )
                 }
@@ -96,7 +97,7 @@ fun TextInputComponent(
             shape = RoundedCornerShape(10.dp),
         )
         Text(
-            text = "Please use standard characters only - no symbols",
+            text = stringResource(R.string.input_error_message),
             modifier = Modifier
                 .padding(top = 8.dp)
                 .alpha(if (isError) 1f else 0f),

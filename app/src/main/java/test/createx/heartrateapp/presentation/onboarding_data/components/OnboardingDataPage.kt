@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.presentation.onboarding_data.DataPage
@@ -31,18 +32,18 @@ fun OnboardingDataPage(dataPage: DataPage) {
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
-                text = dataPage.title,
+                text = stringResource(id = dataPage.titleResId),
                 style = MaterialTheme.typography.displayLarge,
                 color = BlackMain
             )
             Text(
-                text = dataPage.subtitle,
+                text = stringResource(id = dataPage.subtitleResId),
                 style = MaterialTheme.typography.displayLarge,
                 color = RedMain
             )
         }
         Text(
-            text = dataPage.description,
+            text = stringResource(id = dataPage.descriptionResId),
             style = MaterialTheme.typography.bodySmall,
             color = GreySubText
         )

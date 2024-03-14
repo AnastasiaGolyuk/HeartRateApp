@@ -20,10 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import test.createx.heartrateapp.R
+import test.createx.heartrateapp.presentation.navigation.Graph
 import test.createx.heartrateapp.presentation.navigation.Route
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreyBg
@@ -52,13 +55,13 @@ fun SettingsScreen(navController: NavController) {
                     containerColor = White
                 ),
                 contentPadding = PaddingValues(16.dp),
-                onClick = { navController.navigate(Route.ProfileScreen.route)}) {
+                onClick = { navController.navigate(Graph.ProfileDetailsGraph.route)}) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Profile details",
+                        text = stringResource(R.string.settings_profile_details_title),
                         color = BlackMain,
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall,
@@ -74,13 +77,13 @@ fun SettingsScreen(navController: NavController) {
                     containerColor = White
                 ),
                 contentPadding = PaddingValues(16.dp),
-                onClick = { }) {
+                onClick = { /* TODO Handle button click event */ }) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Contact us",
+                        text = stringResource(R.string.settings_contact_us_title),
                         color = BlackMain,
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -96,13 +99,13 @@ fun SettingsScreen(navController: NavController) {
                 ),
                 shape = RectangleShape,
                 contentPadding = PaddingValues(16.dp),
-                onClick = { }) {
+                onClick = { /* TODO Handle button click event */ }) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Review",
+                        text = stringResource(R.string.settings_review_title),
                         color = BlackMain,
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -118,13 +121,13 @@ fun SettingsScreen(navController: NavController) {
                 ),
                 shape = RectangleShape,
                 contentPadding = PaddingValues(16.dp),
-                onClick = { }) {
+                onClick = { /* TODO Handle button click event */ }) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Privacy policy",
+                        text = stringResource(R.string.privacy_policy_title),
                         color = BlackMain,
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
@@ -140,13 +143,13 @@ fun SettingsScreen(navController: NavController) {
                     containerColor = White
                 ),
                 contentPadding = PaddingValues(16.dp),
-                onClick = { }) {
+                onClick = { /* TODO Handle button click event */ }) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Text(
-                        text = "Terms of use",
+                        text = stringResource(R.string.terms_of_use_title),
                         color = BlackMain,
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),

@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -79,15 +80,15 @@ fun PaywallScreen(navController: NavController) {
                 IconButton(onClick = { navController.navigate(Route.OnboardingDataScreen.route) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.close_icon),
-                        contentDescription = "Close",
+                        contentDescription = stringResource(R.string.close_icon_description),
                         tint = GreySubText
                     )
                 }
                 TextButton(
-                    onClick = { /* TODO */ },
+                    onClick = { /* TODO Add in-app billing restore */ },
                     content = {
                         Text(
-                            text = "Restore",
+                            text = stringResource(R.string.billing_restore_button_text),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                             color = GreySubText
@@ -95,7 +96,6 @@ fun PaywallScreen(navController: NavController) {
                     }
                 )
             }
-
 
             val topFade = Brush.verticalGradient(0f to Color.Transparent, 0.03f to Color.White)
 
@@ -110,7 +110,7 @@ fun PaywallScreen(navController: NavController) {
                         .height(156.dp)
                         .align(Alignment.BottomCenter),
                     painter = painterResource(id = R.drawable.paywall_bg),
-                    contentDescription = "",
+                    contentDescription = stringResource(R.string.background_wave_image_description),
                     contentScale = ContentScale.FillBounds,
                 )
                 Column(
@@ -122,7 +122,7 @@ fun PaywallScreen(navController: NavController) {
 
                     Text(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        text = "Use 100% All the functionality of the App",
+                        text = stringResource(R.string.billing_title),
                         style = MaterialTheme.typography.displayMedium,
                         color = BlackMain,
                         textAlign = TextAlign.Center
@@ -150,15 +150,24 @@ fun PaywallScreen(navController: NavController) {
                                         color = RedMain,
                                     )
                                 ) {
-                                    append("Free 3 days trial, ")
+                                    append(
+                                        stringResource(R.string.billing_trial_info_text).substringBefore(
+                                            ','
+                                        )
+                                    )
                                 }
                                 withStyle(style = SpanStyle(color = GreySubText)) {
-                                    append("then \$7.99/Week")
+                                    append(
+                                        stringResource(R.string.billing_trial_info_text).substringAfter(
+                                            ','
+                                        )
+                                    )
                                 }
                             }, style = MaterialTheme.typography.bodyMedium
                         )
                         ElevatedButton(
                             onClick = {
+                                /* TODO Add in-app billing (subscription) */
                                 navController.navigate(Route.OnboardingDataScreen.route)
                             },
                             modifier = Modifier
@@ -177,21 +186,23 @@ fun PaywallScreen(navController: NavController) {
                             )
                         ) {
                             Text(
-                                text = "Get started",
+                                text = stringResource(R.string.get_started_button_text),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = Color.White
                             )
                         }
                         Row(
-                            modifier = Modifier.padding(bottom = 7.dp).height(16.dp),
+                            modifier = Modifier
+                                .padding(bottom = 7.dp)
+                                .height(16.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             TextButton(
-                                onClick = { /* Handle button click event */ },
+                                onClick = { /* TODO Handle button click event */ },
                                 content = {
                                     Text(
-                                        text = "Terms of Use",
+                                        text = stringResource(id = R.string.terms_of_use_title),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = GreySubText
                                     )
@@ -205,10 +216,10 @@ fun PaywallScreen(navController: NavController) {
                                 color = RedMain.copy(alpha = 0.2f)
                             )
                             TextButton(
-                                onClick = { /* Handle button click event */ },
+                                onClick = { /* TODO Handle button click event */ },
                                 content = {
                                     Text(
-                                        text = "Privacy Policy",
+                                        text = stringResource(id = R.string.privacy_policy_title),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = GreySubText
                                     )

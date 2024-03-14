@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -54,10 +55,10 @@ fun OnboardingPage(
                         )
                     )
                     {
-                        append(page.title.substringBeforeLast(' '))
+                        append(stringResource(id = page.title).substringBeforeLast(' '))
                     }
                     withStyle(style = SpanStyle(color = RedMain, fontWeight = FontWeight.Bold)) {
-                        append(" ${page.title.substringAfterLast(' ')}")
+                        append(" ${stringResource(id = page.title).substringAfterLast(' ')}")
                     }
                 },
                 style = MaterialTheme.typography.displayMedium
@@ -65,7 +66,7 @@ fun OnboardingPage(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 textAlign = TextAlign.Center,
-                text = page.description,
+                text = stringResource(id = page.description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = GreySubText
             )
@@ -76,7 +77,11 @@ fun OnboardingPage(
                 .fillMaxWidth()
                 .height(370.dp)
         ) {
-            AnimationLottie(animationId = page.image, modifier = Modifier.fillMaxWidth(),contentScale = ContentScale.FillWidth)
+            AnimationLottie(
+                animationId = page.image,
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.FillWidth
+            )
         }
     }
 }

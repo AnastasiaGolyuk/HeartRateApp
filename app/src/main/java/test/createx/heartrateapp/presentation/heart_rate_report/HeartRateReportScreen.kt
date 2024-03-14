@@ -74,6 +74,10 @@ fun HeartRateReportScreen(
         stringResource(id = R.string.exercise_high_rate_hint)
     )
 
+    val userStatesList = UserState.get().map { stringResource(id = it.title) }
+
+    val heartRatesMap = HeartRateStatus.get().associate { Pair(it.title, stringResource(id = it.title)) }
+
     val scrollState = rememberScrollState()
 
     val openAlertDialog = remember { mutableStateOf(false) }
@@ -81,8 +85,16 @@ fun HeartRateReportScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
+
         viewModel.initHintsList(normalHints, exerciseHints)
-        viewModel.setHeartRateState(heartRateValue = rate.toInt(), userState = userState)
+        viewModel.setHeartRateState(
+            heartRateValue = rate.toInt(),
+            userState = userState,
+            userStatesList = userStatesList,
+            heartRateStatuses = HeartRateStatus.get(),
+            heartRatesMap = heartRatesMap
+        )
+
         onComposing(
             TopAppBarNavigationState(
                 action = {
@@ -104,10 +116,11 @@ fun HeartRateReportScreen(
                 onConfirmation = {
                     openAlertDialog.value = false
                     navController.popBackStack()
+                    navController.navigate(Route.HeartRateScreen.route)
                 },
-                dialogTitle = "Close the measurement?",
-                dialogText = "The measured data will not be saved",
-                confirmButtonText = "Close"
+                dialogTitle = stringResource(R.string.rate_report_alert_dialog_title),
+                dialogText = stringResource(R.string.rate_report_alert_dialog_description),
+                confirmButtonText = stringResource(R.string.close_icon_description)
             )
         }
         Column(
@@ -129,7 +142,7 @@ fun HeartRateReportScreen(
             Box(modifier = Modifier.height(160.dp)) {
                 Image(
                     painter = painterResource(id = R.drawable.heart_result_img),
-                    contentDescription = "",
+                    contentDescription = stringResource(id = R.string.measurements_heart_image_description),
                     modifier = Modifier.fillMaxHeight(),
                     contentScale = ContentScale.FillHeight
                 )
@@ -137,16 +150,16 @@ fun HeartRateReportScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier.background(
-                        viewModel.heartRateStatus.value.colorBg,
+                        viewModel.heartRateStatus.value!!.colorBg,
                         RoundedCornerShape(10.dp)
                     ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = viewModel.heartRateStatus.value.title,
+                        text = stringResource(id = viewModel.heartRateStatus.value!!.title),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        color = viewModel.heartRateStatus.value.colorText,
+                        color = viewModel.heartRateStatus.value!!.colorText,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -158,7 +171,7 @@ fun HeartRateReportScreen(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "bmp",
+                    text = stringResource(id = R.string.bpm_title),
                     style = MaterialTheme.typography.bodyMedium,
                     color = GreySubText,
                     textAlign = TextAlign.Center
@@ -181,9 +194,9 @@ fun HeartRateReportScreen(
                     ) {
                         Image(
                             painter = painterResource(id = getImageResState(userState)),
-                            contentDescription = "",
-                            modifier = Modifier.fillMaxHeight(),
-                            contentScale = ContentScale.FillHeight
+                            contentDescription = stringResource(id = R.string.user_state_icon_description),
+                            modifier = Modifier.size(24.dp),
+                            contentScale = ContentScale.Fit
                         )
                     }
                     Text(
@@ -252,7 +265,7 @@ fun HeartRateReportScreen(
             )
         ) {
             Text(
-                text = "Save result",
+                text = stringResource(R.string.save_result_button_text),
                 style = MaterialTheme.typography.titleSmall,
                 color = Color.White
             )
@@ -260,9 +273,10 @@ fun HeartRateReportScreen(
     }
 }
 
+@Composable
 private fun getImageResState(state: String): Int {
     for (userState in UserState.get()) {
-        if (userState.title == state) {
+        if (stringResource(id = userState.title) == state) {
             return userState.image
         }
     }

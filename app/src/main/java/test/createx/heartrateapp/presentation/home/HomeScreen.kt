@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -45,7 +46,7 @@ fun HomeScreen(isFirstEnter: Boolean) {
         animateDpAsState(
             targetValue = if (appState.shouldShowTopBar) 0.dp else (-56).dp,
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
-            label = "bottomBarAnimation"
+            label = "topBarAnimation"
         )
 
     var shouldPutOffset by remember {
@@ -61,7 +62,7 @@ fun HomeScreen(isFirstEnter: Boolean) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = appState.topBarTitle,
+                title = stringResource(id = appState.topBarTitleRes),
                 shouldShowNavigationButton = appState.shouldShowTopAppBarIcon,
                 iconRes = appState.topAppBarNavigationState.value.iconRes,
                 action = appState.topAppBarNavigationState.value.action,

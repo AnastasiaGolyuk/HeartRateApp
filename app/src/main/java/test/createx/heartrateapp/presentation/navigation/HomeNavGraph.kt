@@ -37,7 +37,8 @@ fun HomeNavGraph(
         startDestination = Route.HeartRateScreen.route
     ) {
         heartRateNavGraph(navController = navController, onComposing = onComposing)
-        workoutNavGraph(navController = navController, onComposing = onComposing)
+        workoutNavGraph(navController = navController)
+        profileDetailsNavGraph(navController = navController, onComposing = onComposing)
         composable(route = Route.HeartRateScreen.route) {
             HeartRateScreen(navController = navController)
         }
@@ -54,16 +55,8 @@ fun HomeNavGraph(
         composable(route = Route.SettingsScreen.route) {
             SettingsScreen(navController = navController)
         }
-        composable(route = Route.ProfileScreen.route) {
-            val viewModel: ProfileViewModel = hiltViewModel()
-            ProfileScreen(
-                viewModel = viewModel,
-                onComposing = onComposing,
-                navController = navController
-            )
-        }
         composable(route = Route.WorkoutScreen.route) {
-            WorkoutScreen(navController=navController)
+            WorkoutScreen(navController = navController)
         }
     }
 }
@@ -111,8 +104,7 @@ fun NavGraphBuilder.heartRateNavGraph(
 }
 
 fun NavGraphBuilder.workoutNavGraph(
-    navController: NavHostController,
-    onComposing: (TopAppBarNavigationState) -> Unit
+    navController: NavHostController
 ) {
     navigation(
         startDestination = Route.WorkoutExerciseScreen.route,
@@ -122,6 +114,26 @@ fun NavGraphBuilder.workoutNavGraph(
         composable(route = Route.WorkoutExerciseScreen.route) {
             val viewModel: WorkoutExerciseViewModel = hiltViewModel()
             WorkoutExerciseScreen(navController = navController, viewModel = viewModel)
+        }
+    }
+}
+
+fun NavGraphBuilder.profileDetailsNavGraph(
+    navController: NavHostController,
+    onComposing: (TopAppBarNavigationState) -> Unit
+) {
+    navigation(
+        startDestination = Route.ProfileScreen.route,
+        route = Graph.ProfileDetailsGraph.route,
+    )
+    {
+        composable(route = Route.ProfileScreen.route) {
+            val viewModel: ProfileViewModel = hiltViewModel()
+            ProfileScreen(
+                viewModel = viewModel,
+                onComposing = onComposing,
+                navController = navController
+            )
         }
     }
 }

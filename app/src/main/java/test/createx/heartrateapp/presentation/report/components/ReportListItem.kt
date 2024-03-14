@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import co.yml.charts.common.extensions.isNotNull
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.data.database.entity.HeartRate
 import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
@@ -46,23 +47,24 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReportListItem(heartRate: HeartRate) {
+
     var iconStateRes by remember {
         mutableIntStateOf(0)
     }
+
     for (userState in UserState.get()) {
-        if (userState.title == heartRate.userState) {
+        if (stringResource(id = userState.title) == heartRate.userState) {
             iconStateRes = userState.image
         }
     }
+
     var heartRateStatusInstance by remember {
         mutableStateOf(HeartRateStatus.get()[0])
     }
 
-    LaunchedEffect(Unit) {
-        for (heartRateStatus in HeartRateStatus.get()) {
-            if (heartRateStatus.title.substringBefore(' ') == heartRate.heartRateStatus) {
-                heartRateStatusInstance = heartRateStatus
-            }
+    for (heartRateStatus in HeartRateStatus.get()) {
+        if (stringResource(id = heartRateStatus.title).substringBefore(' ') == heartRate.heartRateStatus) {
+            heartRateStatusInstance = heartRateStatus
         }
     }
 
@@ -71,20 +73,18 @@ fun ReportListItem(heartRate: HeartRate) {
             .fillMaxWidth()
             .background(color = White, shape = RoundedCornerShape(18.dp))
             .padding(16.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
             modifier = Modifier
                 .weight(1f)
-                .wrapContentWidth(Alignment.Start)
-            ,
+                .wrapContentWidth(Alignment.Start),
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.heart_icon),
-                contentDescription = "",
+                contentDescription = stringResource(id = R.string.heart_icon_description),
                 modifier = Modifier.width(28.dp),
                 contentScale = ContentScale.FillWidth
             )
@@ -94,7 +94,7 @@ fun ReportListItem(heartRate: HeartRate) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
-                    modifier=Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -105,14 +105,12 @@ fun ReportListItem(heartRate: HeartRate) {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "bpm",
+                        text = stringResource(id = R.string.bpm_title),
                         color = GreySubText,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-                if (heartRate.userState == null) {
-                    Box {}
-                } else {
+                if (heartRate.userState.isNotNull()) {
                     Box(
                         modifier = Modifier
                             .background(
@@ -125,7 +123,7 @@ fun ReportListItem(heartRate: HeartRate) {
                     ) {
                         Image(
                             painter = painterResource(id = iconStateRes),
-                            contentDescription = "",
+                            contentDescription = stringResource(id = R.string.user_state_icon_description),
                             modifier = Modifier.size(24.dp),
                             contentScale = ContentScale.Fit
                         )

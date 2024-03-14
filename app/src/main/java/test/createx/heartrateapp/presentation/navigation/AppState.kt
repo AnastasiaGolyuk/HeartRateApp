@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.topAppBar.TopAppBarNavigationState
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,18 +44,18 @@ class AppState @Inject constructor(
             .currentBackStackEntryAsState().value?.destination?.route in appBarIconRoutes
 
 
-    val topBarTitle: String
+    val topBarTitleRes: Int
         @Composable get() {
             return when (navController.currentBackStackEntryAsState().value?.destination?.route) {
-                Route.StatisticsScreen.route -> "My statistics"
-                Route.WorkoutScreen.route -> "Workout"
-                Route.HeartRateScreen.route -> "Heart rate"
-                Route.HeartRateMeasurementScreen.route -> "Heart rate"
-                "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}" -> "HeartRate"
-                Route.ReportScreen.route -> "My reports"
-                Route.SettingsScreen.route -> "Settings"
-                Route.ProfileScreen.route -> "Profile details"
-                else -> ""
+                Route.StatisticsScreen.route -> R.string.statistics_screen_title
+                Route.WorkoutScreen.route -> R.string.workout_screen_title
+                Route.HeartRateScreen.route -> R.string.heart_rate_screen_title
+                Route.HeartRateMeasurementScreen.route -> R.string.heart_rate_screen_title
+                "${Route.HeartRateReportScreen.route}?userState={userState}&heartRate={heartRate}" -> R.string.heart_rate_screen_title
+                Route.ReportScreen.route -> R.string.reports_screen_title
+                Route.SettingsScreen.route -> R.string.settings_screen_title
+                Route.ProfileScreen.route -> R.string.profile_details_screen_title
+                else -> R.string.heart_rate_screen_title
             }
         }
 

@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -93,7 +94,7 @@ fun HeartRateScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(16.dp),
-                    text = Hint.get()[0].hint,
+                    text = stringResource(id = Hint.get()[0].hint),
                     style = MaterialTheme.typography.bodyMedium,
                     color = RedMain,
                     textAlign = TextAlign.Start
@@ -123,19 +124,19 @@ fun HeartRateScreen(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.heart_rate),
-                        contentDescription = "",
+                        contentDescription = stringResource(id = R.string.heart_icon_description),
                         modifier = Modifier
                             .fillMaxSize(0.34f)
                     )
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "--",
+                            text = stringResource(R.string.bpm_initial_title),
                             style = MaterialTheme.typography.titleLarge,
                             color = BlackMain,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "bmp",
+                            text = stringResource(id = R.string.bpm_title),
                             style = MaterialTheme.typography.bodyMedium,
                             color = GreySubText,
                             textAlign = TextAlign.Center
@@ -163,13 +164,13 @@ fun HeartRateScreen(
                 ) {
 
                     Text(
-                        text = "Measurement time:",
+                        text = stringResource(R.string.measurement_time_text),
                         style = MaterialTheme.typography.bodySmall,
                         color = BlackMain,
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "Just 30 seconds",
+                        text = stringResource(R.string.measurement_time_init_text,30),
                         style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = RedMain,
                         textAlign = TextAlign.Center
@@ -207,7 +208,7 @@ fun HeartRateScreen(
             )
         ) {
             Text(
-                text = "Start measurement",
+                text = stringResource(R.string.start_measurement_button_text),
                 style = MaterialTheme.typography.titleSmall,
                 color = Color.White
             )

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.workout_exercises.Workout
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
@@ -34,15 +34,16 @@ fun WorkoutExercisePage(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight(0.72f)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.35f),
+                modifier = Modifier.weight(1f),
+//                    .fillMaxWidth()
+//                    .fillMaxHeight(),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Text(
@@ -52,15 +53,15 @@ fun WorkoutExercisePage(
                 )
                 Image(
                     painter = painterResource(id = workout.imageRes),
-                    contentDescription = "",
+                    contentDescription = stringResource(R.string.workout_image_description),
                     modifier = Modifier.fillMaxHeight(),
                     contentScale = ContentScale.FillHeight
                 )
             }
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y= (-15).dp)
+
+                    .offset(y = (-15).dp)
                     .background(color = RedBg, shape = RoundedCornerShape(10.dp))
                     .padding(vertical = 12.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)

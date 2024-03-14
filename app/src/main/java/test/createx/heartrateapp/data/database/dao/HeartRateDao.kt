@@ -27,6 +27,6 @@ interface HeartRateDao {
     @Query("SELECT * FROM heart_rate WHERE user_id = :userId")
     fun getAllHeartRates(userId: Int): Flow<List<HeartRate>>
 
-    @Query("SELECT * FROM heart_rate WHERE user_id = :userId AND date_time >= :periodStartDate")
+    @Query("SELECT * FROM heart_rate WHERE user_id = :userId AND date_time >= :periodStartDate ORDER BY date_time DESC")
     fun getAllPeriodHeartRates(userId: Int, periodStartDate: OffsetDateTime): Flow<List<HeartRate>>
 }

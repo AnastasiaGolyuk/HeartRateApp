@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,7 @@ fun WorkoutScreen(navController:NavController) {
                 Image(
                     modifier = Modifier.fillMaxHeight(0.26f),
                     painter = painterResource(id = R.drawable.workout_img),
-                    contentDescription = "",
+                    contentDescription = stringResource(R.string.workout_intro_image_description),
                     contentScale = ContentScale.FillHeight
                 )
                 Column(
@@ -71,13 +72,13 @@ fun WorkoutScreen(navController:NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Get some exercise",
+                        text = stringResource(R.string.workout_intro_title),
                         style = MaterialTheme.typography.titleMedium,
                         color = BlackMain,
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "The heart is a muscle which becomes more efficient with exercise.  When you exercise, your muscles help to circulate blood through the body taking some of the strain and effort off the heart. In addition, exercising regularly can help ensure normal blood pressure and blood flow.",
+                        text = stringResource(R.string.workout_intro_description),
                         style = MaterialTheme.typography.bodyMedium,
                         color = GreySubText,
                         textAlign = TextAlign.Center
@@ -89,7 +90,7 @@ fun WorkoutScreen(navController:NavController) {
                     color = RedMain.copy(alpha = 0.25f)
                 )
                 Text(
-                    text = "Only 5 exercises per day",
+                    text = stringResource(R.string.workout_intro_subscription_details_text),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     color = RedMain,
                     textAlign = TextAlign.Center
@@ -120,7 +121,7 @@ fun WorkoutScreen(navController:NavController) {
                 )
             ) {
                 Text(
-                    text = "Start workout",
+                    text = stringResource(R.string.workout_intro_button_text),
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.White
                 )

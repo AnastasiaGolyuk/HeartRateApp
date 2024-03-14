@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.paywall.SubscriptionBenefitItem
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreySubText
@@ -26,7 +28,7 @@ fun SubscriptionBenefitComponent(benefitItem: SubscriptionBenefitItem) {
     ) {
         Icon(
             painter = painterResource(id = benefitItem.icon),
-            contentDescription = "",
+            contentDescription = stringResource(R.string.benefit_icon_description),
             tint = RedMain
         )
         Column(
@@ -35,13 +37,13 @@ fun SubscriptionBenefitComponent(benefitItem: SubscriptionBenefitItem) {
             ),
         ) {
             Text(
-                text = benefitItem.title,
+                text = stringResource(benefitItem.title),
                 style = MaterialTheme.typography.titleSmall,
                 color = BlackMain,
                 textAlign = TextAlign.Start
             )
             Text(
-                text = benefitItem.description,
+                text = stringResource(benefitItem.description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = GreySubText
             )

@@ -1,29 +1,39 @@
 package test.createx.heartrateapp.presentation.onboarding_data
 
+import androidx.annotation.StringRes
+import test.createx.heartrateapp.R
+
 data class DataPage(
-    val title: String,
-    val subtitle: String,
-    val description: String,
+    @StringRes val titleResId: Int,
+    @StringRes val subtitleResId: Int,
+    @StringRes val descriptionResId: Int
 ) {
     companion object {
-
         fun get() = listOf(
             DataPage(
-                "Welcome", "What's your name?", "We'd be happy to meet you!"
+                R.string.welcome_title,
+                R.string.welcome_subtitle,
+                R.string.welcome_description
             ),
             DataPage(
-                "Hey!", "What is your sex?", "This would be factored into the measurements"
+                R.string.hey_title,
+                R.string.hey_subtitle,
+                R.string.hey_description
             ),
             DataPage(
-                "Thanks", "How old are you?", "This is necessary for accurate measurements"
+                R.string.thanks_title,
+                R.string.thanks_subtitle,
+                R.string.thanks_description
             ),
             DataPage(
-                "Good", "Add your parameters", "This will provide more accurate readings"
+                R.string.good_title,
+                R.string.good_subtitle,
+                R.string.good_description
             ),
             DataPage(
-                "And the last",
-                "Choose your lifestyle",
-                "This will help us tailor a workout program for you"
+                R.string.last_title,
+                R.string.last_subtitle,
+                R.string.last_description
             )
         )
     }

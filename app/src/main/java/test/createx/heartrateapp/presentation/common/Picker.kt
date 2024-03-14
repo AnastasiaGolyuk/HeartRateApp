@@ -48,7 +48,7 @@ fun Picker(
     val visibleItemsMiddle = visibleItemsCount / 2
 
     val blankItemsList = List(visibleItemsMiddle) { "" }
-    val preparedItems = mutableStateListOf<String>()
+    val preparedItems = remember { mutableStateListOf<String>() }
 
     preparedItems.addAll(blankItemsList)
     preparedItems.addAll(items)

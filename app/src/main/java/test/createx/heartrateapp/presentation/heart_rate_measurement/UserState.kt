@@ -1,26 +1,27 @@
 package test.createx.heartrateapp.presentation.heart_rate_measurement
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import test.createx.heartrateapp.R
 
 data class UserState(
-    val title: String,
+    @StringRes val title: Int,
     @DrawableRes val image: Int,
 ) {
 
     companion object {
         fun get() = listOf(
             UserState(
-                "Normal",
+                R.string.normal_state_title,
                 R.drawable.normal_emoji
             ), UserState(
-                "Resting",
+                R.string.resting_state_title,
                 R.drawable.resting_emoji
             ), UserState(
-                "Walking",
+                R.string.walking_state_title,
                 R.drawable.walking_emoji
             ), UserState(
-                "Exercise",
+                R.string.exercise_state_title,
                 R.drawable.exercise_emoji
             )
         )

@@ -5,7 +5,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import co.yml.charts.common.extensions.isNotNull
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.ui.theme.BlackMain
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedMain
@@ -16,7 +19,7 @@ fun AlertDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
-    dialogText: String?=null,
+    dialogText: String? = null,
     confirmButtonText: String
 ) {
     AlertDialog(
@@ -30,9 +33,9 @@ fun AlertDialog(
             )
         },
         text = {
-            if (dialogText != null) {
+            if (dialogText.isNotNull()) {
                 Text(
-                    text = dialogText,
+                    text = dialogText!!,
                     style = MaterialTheme.typography.bodySmall,
                     color = GreySubText,
                     textAlign = TextAlign.Start
@@ -62,7 +65,7 @@ fun AlertDialog(
                 }
             ) {
                 Text(
-                    text = "Cancel",
+                    text = stringResource(R.string.cancel_button_text),
                     style = MaterialTheme.typography.bodyMedium,
                     color = RedMain
                 )

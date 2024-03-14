@@ -19,7 +19,6 @@ import java.time.OffsetDateTime
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ReportViewModel @Inject constructor(
     private val heartRateRepository: HeartRateRepositoryImpl,
@@ -28,35 +27,57 @@ class ReportViewModel @Inject constructor(
     private val usersFlow: Flow<List<User>> = userRepository.getAllUsersStream()
     private val userId = mutableIntStateOf(1)
 
-    private val _heartRatesDailyList = mutableStateListOf<DailyRecords>()
+    private var _heartRatesDailyList = mutableStateListOf<DailyRecords>()
     val heartRatesDailyList: SnapshotStateList<DailyRecords> = _heartRatesDailyList
 
-    val periods = listOf("Week", "Month")
+    val periods = mutableListOf<String>()
 
-    private val _selectedPeriod = mutableStateOf(periods[0])
+    private val _selectedPeriod = mutableStateOf("")
     val selectedPeriod: State<String> = _selectedPeriod
+
+    private val _heartRatesWeeklyList = mutableStateListOf<HeartRate>()
+    val heartRatesWeeklyList : SnapshotStateList<HeartRate> = _heartRatesWeeklyList
+
+    private var heartRatesMonthlyList = mutableStateListOf<HeartRate>()
+
+    private val _isLoading = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
 
     init {
         viewModelScope.launch {
             usersFlow.collect { res ->
                 if (res.isNotEmpty()) {
                     userId.intValue = res[0].id
-                    setWeekHeartRatesList()
                 }
             }
+        }
+        setWeekHeartRatesList()
+        setMonthHeartRatesList()
+    }
+
+    fun setPeriodsList(periods: List<String>){
+        this.periods.clear()
+        this.periods.addAll(periods)
+        if (_heartRatesWeeklyList.isEmpty()) {
+            togglePeriod(periods[1])
+        } else {
+            togglePeriod(periods[0])
         }
     }
 
     private fun setDailyRecordsList(list: List<HeartRate>) {
         val groupedItems = list.groupBy { it.dateTime.dayOfMonth }
+        val dataList = mutableListOf<DailyRecords>()
         for (group in groupedItems) {
-            _heartRatesDailyList.add(
+            dataList.add(
                 DailyRecords(
                     dateTime = group.value[0].dateTime,
                     heartRateList = group.value
                 )
             )
         }
+        _heartRatesDailyList.clear()
+        _heartRatesDailyList.addAll(dataList)
     }
 
     fun togglePeriod(period: String) {
@@ -67,11 +88,10 @@ class ReportViewModel @Inject constructor(
     }
 
     private fun changeListItems() {
-        _heartRatesDailyList.clear()
         if (_selectedPeriod.value == periods[0]) {
-            setWeekHeartRatesList()
+            setDailyRecordsList(heartRatesWeeklyList)
         } else {
-            setMonthHeartRatesList()
+            setDailyRecordsList(heartRatesMonthlyList)
         }
     }
 
@@ -82,7 +102,8 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             heartRateRepository.getAllPeriodHeartRatesStream(userId.intValue, startDateOfTheWeek)
                 .collect { res ->
-                    setDailyRecordsList(res)
+                    _heartRatesWeeklyList.addAll(res)
+                    _isLoading.value = false
                 }
         }
     }
@@ -95,10 +116,8 @@ class ReportViewModel @Inject constructor(
         viewModelScope.launch {
             heartRateRepository.getAllPeriodHeartRatesStream(userId.intValue, startDateOfTheMonth)
                 .collect { res ->
-                    setDailyRecordsList(res)
+                    heartRatesMonthlyList.addAll(res)
                 }
         }
     }
-
-
 }

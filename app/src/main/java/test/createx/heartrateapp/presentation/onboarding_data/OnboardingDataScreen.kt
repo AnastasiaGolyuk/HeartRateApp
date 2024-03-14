@@ -32,6 +32,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -53,6 +55,12 @@ import test.createx.heartrateapp.ui.theme.White
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingDataScreen(viewModel: OnboardingDataViewModel, navController: NavController) {
+
+    val units = stringArrayResource(id = R.array.units_array)
+
+    LaunchedEffect(Unit) {
+        viewModel.setUnitsList(units.asList())
+    }
 
     val pages = DataPage.get()
     val pagerState = rememberPagerState(
@@ -95,7 +103,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel, navController: NavC
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.return_icon),
-                        contentDescription = "Go back",
+                        contentDescription = stringResource(id = R.string.go_back_icon_description),
                         tint = BlackMain
                     )
                 }
@@ -109,7 +117,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel, navController: NavC
                 navController.navigate(Route.HomeScreen.route)
             }, content = {
                 Text(
-                    text = "Skip",
+                    text = stringResource(R.string.skip_button_text),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = GreySubText
@@ -162,7 +170,7 @@ fun OnboardingDataScreen(viewModel: OnboardingDataViewModel, navController: NavC
                 )
             ) {
                 Text(
-                    text = "Continue",
+                    text = stringResource(id = R.string.continue_button_text),
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.White
                 )
@@ -198,18 +206,26 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
     when (index) {
         0 -> {
-            TextInputComponent(onInput = onClick, text = viewModel.user.value.name, containerColor = White)
+            TextInputComponent(
+                onInput = onClick,
+                text = viewModel.user.value.name,
+                containerColor = White
+            )
         }
 
         1 -> {
             ToggleInputComponent(
-                data = viewModel.pronouns, onClick = onClick, value = viewModel.user.value.sex
+                data = stringArrayResource(id = viewModel.pronouns).asList(),
+                onClick = onClick,
+                value = viewModel.user.value.sex
             )
         }
 
         2 -> {
             ToggleInputComponent(
-                data = viewModel.age, onClick = onClick, value = viewModel.user.value.age
+                data = stringArrayResource(id = viewModel.age).asList(),
+                onClick = onClick,
+                value = viewModel.user.value.age
             )
         }
 
@@ -228,9 +244,9 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
                 )
 
                 ExpandablePickerButton(
-                    title = "Weight",
-                    shape= RoundedCornerShape(10.dp),
-                    isVisible = viewModel.isWeightPickerVisible,
+                    title = stringResource(id = R.string.report_weight_input_title),
+                    shape = RoundedCornerShape(10.dp),
+                    isVisible = viewModel.isWeightPickerVisible.value,
                     onToggleVisibility = {
                         viewModel.onToggleWeightVisibility()
                     },
@@ -240,9 +256,9 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
                 )
 
                 ExpandablePickerButton(
-                    title = "Height",
-                    shape= RoundedCornerShape(10.dp),
-                    isVisible = viewModel.isHeightPickerVisible,
+                    title = stringResource(id = R.string.report_height_input_title),
+                    shape = RoundedCornerShape(10.dp),
+                    isVisible = viewModel.isHeightPickerVisible.value,
                     onToggleVisibility = {
                         viewModel.onToggleHeightVisibility()
                     },
@@ -255,7 +271,7 @@ private fun GetInput(index: Int, viewModel: OnboardingDataViewModel) {
 
         4 -> {
             ToggleInputComponent(
-                data = viewModel.lifestyle,
+                data = stringArrayResource(id = viewModel.lifestyle).asList(),
                 onClick = onClick,
                 value = viewModel.user.value.lifestyle,
             )

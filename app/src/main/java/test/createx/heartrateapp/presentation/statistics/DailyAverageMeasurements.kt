@@ -1,4 +1,4 @@
-package test.createx.heartrateapp.presentation.statistics.components
+package test.createx.heartrateapp.presentation.statistics
 
 data class DailyAverageMeasurements(
     val dayOfPeriod: Int,

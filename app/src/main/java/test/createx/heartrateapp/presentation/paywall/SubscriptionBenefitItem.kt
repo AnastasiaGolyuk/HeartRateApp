@@ -1,28 +1,29 @@
 package test.createx.heartrateapp.presentation.paywall
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import test.createx.heartrateapp.R
 
 data class SubscriptionBenefitItem(
-    val title: String,
-    val description: String,
+    @StringRes val title: Int,
+    @StringRes val description: Int,
     @DrawableRes val icon: Int,
 ) {
     companion object {
         fun get() = listOf(
             SubscriptionBenefitItem(
-                "Heart statistics",
-                "A simple way to monitor your health is to measure your heart rate anytime, anywhere.",
+                R.string.heart_statistics_title,
+                R.string.heart_statistics_description,
                 R.drawable.chart_icon,
             ),
             SubscriptionBenefitItem(
-                "Health suggestions",
-                "Get useful tips for your health. Now you won't miss anything important.",
+                R.string.health_suggestions_title,
+                R.string.health_suggestions_description,
                 R.drawable.idea_icon,
             ),
             SubscriptionBenefitItem(
-                "Heart rate history",
-                "Get health trend graphs and view health reports.",
+                R.string.heart_rate_history_title,
+                R.string.heart_rate_history_description,
                 R.drawable.report_icon,
             ),
         )

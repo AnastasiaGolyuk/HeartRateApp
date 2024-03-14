@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -85,14 +86,14 @@ fun StateBottomSheetDialog(
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = "Choose your current state",
+                text = stringResource(R.string.state_sheet_dialog_title),
                 style = MaterialTheme.typography.titleSmall,
                 color = BlackMain,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "This will help us to make correct recommendations on the resulting measurement",
+                text = stringResource(R.string.state_sheet_dialog_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = GreySubText,
                 textAlign = TextAlign.Center
@@ -103,16 +104,17 @@ fun StateBottomSheetDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
             ) {
-                items(userStateList) { item ->
+                items(items = userStateList) { item ->
+                    val title = stringResource(id = item.title)
                     OutlinedCard(
-                        onClick = { selectedState = item.title },
+                        onClick = { selectedState = title },
                         shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.outlinedCardColors(
-                            containerColor = if (selectedState == item.title) RedBg else White,
+                            containerColor = if (selectedState == title) RedBg else White,
                         ),
                         border = BorderStroke(
                             width = 2.dp,
-                            color = if (selectedState == item.title) RedAction else RedMain.copy(
+                            color = if (selectedState == title) RedAction else RedMain.copy(
                                 alpha = 0.2f
                             )
                         )
@@ -129,14 +131,14 @@ fun StateBottomSheetDialog(
                         ) {
                             Image(
                                 painter = painterResource(id = item.image),
-                                contentDescription = "",
+                                contentDescription = stringResource(id = R.string.user_state_icon_description),
                                 modifier = Modifier.size(50.dp),
                                 alignment = Alignment.Center
                             )
                             Text(
-                                text = item.title,
+                                text = title,
                                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                color = if (selectedState == item.title) RedAction else BlackMain,
+                                color = if (selectedState == title) RedAction else BlackMain,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -165,7 +167,7 @@ fun StateBottomSheetDialog(
                 )
             ) {
                 Text(
-                    text = "Create Report",
+                    text = stringResource(R.string.create_report_button_text),
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.White
                 )

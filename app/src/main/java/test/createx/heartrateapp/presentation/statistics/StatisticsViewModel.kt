@@ -15,27 +15,31 @@ import test.createx.heartrateapp.data.database.entity.HeartRate
 import test.createx.heartrateapp.data.database.entity.User
 import test.createx.heartrateapp.data.database.repository.HeartRateRepositoryImpl
 import test.createx.heartrateapp.data.database.repository.UserRepositoryImpl
-import test.createx.heartrateapp.presentation.heart_rate_measurement.UserState
 import test.createx.heartrateapp.presentation.report.DailyRecords
-import test.createx.heartrateapp.presentation.statistics.components.DailyAverageMeasurements
-import test.createx.heartrateapp.presentation.statistics.components.DonutChartData
+import test.createx.heartrateapp.presentation.statistics.components.popularStateChart.DonutChartData
 import test.createx.heartrateapp.ui.theme.BlueState
 import test.createx.heartrateapp.ui.theme.LightBlueState
 import test.createx.heartrateapp.ui.theme.OrangeState
 import test.createx.heartrateapp.ui.theme.PurpleState
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
+import kotlin.math.round
+
+private const val DAYS_IN_WEEK = 7
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val heartRateRepository: HeartRateRepositoryImpl,
     userRepository: UserRepositoryImpl
 ) : ViewModel() {
+
     private val usersFlow: Flow<List<User>> = userRepository.getAllUsersStream()
     private val userId = mutableIntStateOf(1)
+
+    private val _averageRatePerPeriod = mutableIntStateOf(0)
+    val averageRatePerPeriod: State<Int> = _averageRatePerPeriod
 
     private val _heartRatesAverageList = mutableStateListOf<DailyAverageMeasurements>()
     val heartRatesAverageList: SnapshotStateList<DailyAverageMeasurements> = _heartRatesAverageList
@@ -45,20 +49,24 @@ class StatisticsViewModel @Inject constructor(
 
     private val statesColors = listOf(BlueState, OrangeState, LightBlueState, PurpleState)
 
-    val periods = listOf("Week", "Month")
+    private val _periodLabels = mutableStateListOf<String>()
+    val periodLabels: SnapshotStateList<String> = _periodLabels
 
-    private val weekLabels = listOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su")
-
-    private val monthLabels = mutableListOf<String>()
-
-    private val _periodLabels = mutableStateOf(weekLabels)
-    val periodLabels: State<List<String>> = _periodLabels
-
-    private val _selectedPeriod = mutableStateOf(periods[0])
+    private val _selectedPeriod = mutableStateOf("")
     val selectedPeriod: State<String> = _selectedPeriod
 
+    private val _selectedValue = mutableIntStateOf(0)
+    val selectedValue: State<Int> = _selectedValue
+
+    private val _heartRatesWeeklyList = mutableStateListOf<HeartRate>()
+    val heartRatesWeeklyList : SnapshotStateList<HeartRate> = _heartRatesWeeklyList
+
+    private var heartRatesMonthlyList = mutableStateListOf<HeartRate>()
+
+    private val _isLoading = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
+
     init {
-        initMonthList()
         viewModelScope.launch {
             usersFlow.collect { res ->
                 if (res.isNotEmpty()) {
@@ -67,16 +75,20 @@ class StatisticsViewModel @Inject constructor(
                 }
             }
         }
+        setWeekHeartRatesList()
+        setMonthHeartRatesList()
     }
 
-    private fun initMonthList() {
-        val daysInCurrentMonth = LocalDate.now().lengthOfMonth()
-        for (day in 1..daysInCurrentMonth) {
-            monthLabels.add(day.toString())
-        }
+    fun updateSelectedValue(value: Int) {
+        _selectedValue.intValue = value
     }
 
-    private fun setAverageDailyMeasurements(
+    private fun setAverageHeartRate(list: List<HeartRate>) {
+        val sumOfRates = list.sumOf { it.heartRateValue }
+        _averageRatePerPeriod.intValue = round(sumOfRates.toFloat() / list.size).toInt()
+    }
+
+    private fun getAverageDailyMeasurements(
         dateTime: OffsetDateTime,
         list: List<HeartRate>
     ): DailyAverageMeasurements {
@@ -91,7 +103,7 @@ class StatisticsViewModel @Inject constructor(
                 highestRate
             }
         } else normalHeartRateList.sumOf { it.heartRateValue } / normalHeartRateList.size
-        val dayOfPeriod = if (_selectedPeriod.value == periods[0]) {
+        val dayOfPeriod = if (_periodLabels.size == DAYS_IN_WEEK) {
             dateTime.dayOfWeek.value
         } else {
             dateTime.dayOfMonth
@@ -104,15 +116,20 @@ class StatisticsViewModel @Inject constructor(
         )
     }
 
-    private fun setDailyRecordsList(list: List<HeartRate>) {
+    private fun setDailyMeasurementsList(list: List<HeartRate>) {
         val groupedItems = list.groupBy { it.dateTime.dayOfMonth }
+        val dataList = mutableListOf<DailyAverageMeasurements>()
         for (group in groupedItems) {
-            _heartRatesAverageList.add(
-                setAverageDailyMeasurements(
+            dataList.add(
+                getAverageDailyMeasurements(
                     group.value[0].dateTime,
                     group.value
                 )
             )
+        }
+        _heartRatesAverageList.addAll(dataList)
+        if (_heartRatesAverageList.isNotEmpty()) {
+            _selectedValue.intValue = dataList.first().dayOfPeriod
         }
     }
 
@@ -120,41 +137,50 @@ class StatisticsViewModel @Inject constructor(
         val listWithNonNullStates = list.filter { it.userState.isNotNull() }
         val groupedItems = listWithNonNullStates.groupBy { it.userState }
         val index = mutableIntStateOf(0)
+
         for (group in groupedItems) {
 
             val percentage = group.value.size.toFloat() / listWithNonNullStates.size
-            val iconRes = UserState.get().first { it.title==group.key!! }.image
+
             _statesPopularList.add(
                 DonutChartData(
                     color = statesColors[index.intValue],
                     data = percentage,
-                    state = group.key!!,
-                    iconRes = iconRes
+                    userState = group.key!!
                 )
             )
             index.intValue = index.intValue + 1
         }
     }
 
-    fun togglePeriod(period: String) {
-        if (_selectedPeriod.value != period) {
-            _selectedPeriod.value = period
-            _periodLabels.value = if (period == periods[0])
-                weekLabels
-            else
-                monthLabels
 
-            changeListItems()
+    fun togglePeriod(period: String) {
+        if (_selectedPeriod.value != period ) {
+            _selectedPeriod.value = period
         }
     }
 
-    private fun changeListItems() {
+    fun updateData(periodLabels: List<String>) {
+        clearDataLists()
+        _periodLabels.addAll(periodLabels)
+        changeListItems()
+    }
+
+    private fun clearDataLists() {
+        _periodLabels.clear()
         _heartRatesAverageList.clear()
         _statesPopularList.clear()
-        if (_selectedPeriod.value == periods[0]) {
-            setWeekHeartRatesList()
+    }
+
+    private fun changeListItems() {
+        if (_periodLabels.size == DAYS_IN_WEEK ) {
+            setAverageHeartRate(heartRatesWeeklyList)
+            setDailyMeasurementsList(heartRatesWeeklyList)
+            setPopularStatesList(heartRatesWeeklyList)
         } else {
-            setMonthHeartRatesList()
+            setAverageHeartRate(heartRatesMonthlyList)
+            setDailyMeasurementsList(heartRatesMonthlyList)
+            setPopularStatesList(heartRatesMonthlyList)
         }
     }
 
@@ -165,8 +191,7 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             heartRateRepository.getAllPeriodHeartRatesStream(userId.intValue, startDateOfTheWeek)
                 .collect { res ->
-                    setDailyRecordsList(res)
-                    setPopularStatesList(res)
+                    _heartRatesWeeklyList.addAll(res)
                 }
         }
     }
@@ -179,8 +204,8 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             heartRateRepository.getAllPeriodHeartRatesStream(userId.intValue, startDateOfTheMonth)
                 .collect { res ->
-                    setDailyRecordsList(res)
-                    setPopularStatesList(res)
+                    heartRatesMonthlyList.addAll(res)
+                    _isLoading.value = false
                 }
         }
     }

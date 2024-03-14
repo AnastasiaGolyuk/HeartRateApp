@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import test.createx.heartrateapp.R
 import test.createx.heartrateapp.presentation.onboarding_data.components.TextInputComponent
@@ -54,7 +55,7 @@ fun ExpandableTextInputButton(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ButtonContent(title = title, iconDrawableRes = iconRes)
-                if ((value != "") && !isVisible) {
+                if ((value.isNotEmpty()) && !isVisible) {
                     Text(
                         style = MaterialTheme.typography.titleSmall,
                         color = RedAction,
@@ -64,7 +65,7 @@ fun ExpandableTextInputButton(
                 } else {
                     Icon(
                         painter = painterResource(id = R.drawable.add_icon),
-                        contentDescription = "Add input",
+                        contentDescription = stringResource(R.string.add_icon_description),
                         tint = RedAction
                     )
                 }

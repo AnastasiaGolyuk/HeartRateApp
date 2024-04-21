@@ -1,108 +1,97 @@
 package test.createx.heartrateapp.presentation.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
-import test.createx.heartrateapp.data.model.Page
-import test.createx.heartrateapp.presentation.common.PageIndicator
-import test.createx.heartrateapp.presentation.navigation.Route
-import test.createx.heartrateapp.presentation.onboarding.components.OnboardingPage
-import test.createx.heartrateapp.presentation.onboarding_data.OnboardingEvent
-import test.createx.heartrateapp.ui.theme.RedBg
-import test.createx.heartrateapp.ui.theme.RedMain
+import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import kotlinx.coroutines.delay
+import test.createx.heartrateapp.R
+import test.createx.heartrateapp.presentation.onboarding.components.OnboardingScreenContent
+import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        val pages = Page.get()
-        val pagerState = rememberPagerState(
-            initialPage = 0, initialPageOffsetFraction = 0f
-        ) {
-            pages.size
-        }
-        val configuration = LocalConfiguration.current
-        val screenHeight = configuration.screenHeightDp.dp
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 25.dp, bottom = if (screenHeight < 700.dp) 25.dp else 50.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            PageIndicator(pageSize = pages.size, selectedPage = pagerState.currentPage)
-        }
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            HorizontalPager(state = pagerState) { index ->
-                OnboardingPage(page = pages[index])
-            }
-            if (screenHeight < 700.dp) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, RedBg),
-                            )
-                        )
-                )
-            }
-            val scope = rememberCoroutineScope()
-            ElevatedButton(
-                onClick = {
-                    scope.launch {
-                        if (pagerState.currentPage == 1) {
-                            navController.navigate(Route.PaywallScreen.route)
-                        } else {
-                            pagerState.animateScrollToPage(
-                                page = pagerState.currentPage + 1
-                            )
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 58.dp)
-                    .size(width = 328.dp, height = 48.dp)
-                    .shadow(
-                        ambientColor = RedMain, spotColor = Color(0xFFCC0909), elevation = 16.dp
-                    ),
-                colors = ButtonDefaults.elevatedButtonColors(containerColor = RedMain)
-            ) {
-                Text(
-                    text = if (pagerState.currentPage == 0) "Continue" else "Get started",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Color.White
-                )
+
+    val pages = Page.get()
+    val pagerState = rememberPagerState(
+        initialPage = 0, initialPageOffsetFraction = 0f
+    ) {
+        pages.size
+    }
+
+    val compositionBg by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.onboarding1))
+    val bgAnimationState = animateLottieCompositionAsState(composition = compositionBg)
+
+    var isPlaying by remember { mutableStateOf(false) }
+
+    val compositionBg2 by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.onboarding2))
+    val bg2AnimationState =
+        animateLottieCompositionAsState(composition = compositionBg2, isPlaying = isPlaying)
+
+    var isContentVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(3000)
+        isContentVisible = true
+    }
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.targetPage }.collect { page ->
+            if (page == 1) {
+                isPlaying = true
             }
         }
+    }
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        if (!isPlaying) {
+            LottieAnimation(
+                composition = compositionBg,
+                progress = { bgAnimationState.progress },
+                modifier = Modifier.fillMaxSize(),
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            LottieAnimation(
+                composition = compositionBg2,
+                progress = { bg2AnimationState.progress },
+                modifier = Modifier.fillMaxSize(),
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Crop
+            )
+        }
+        OnboardingScreenContent(
+            pagerState = pagerState,
+            pages = pages,
+            navController = navController,
+            isContentVisible = isContentVisible
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OnboardingPrev() {
+    HeartRateAppTheme {
+        OnboardingScreen(navController = rememberNavController())
     }
 }

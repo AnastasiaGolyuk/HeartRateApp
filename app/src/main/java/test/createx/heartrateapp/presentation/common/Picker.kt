@@ -3,128 +3,129 @@ package test.createx.heartrateapp.presentation.common
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import test.createx.heartrateapp.ui.theme.BlackMain
-import test.createx.heartrateapp.ui.theme.GreySubText
-import test.createx.heartrateapp.ui.theme.HeartRateAppTheme
-import test.createx.heartrateapp.ui.theme.RedBg
+import test.createx.heartrateapp.ui.theme.RedMain
 import test.createx.heartrateapp.ui.theme.White
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Picker(
-    values: List<String>,
+    items: List<String>,
     startIndex: Int = 0,
     visibleItemsCount: Int = 5,
+    onSelect: (String) -> Unit = {}
 ) {
-    val pickerViewModel: PickerViewModel = hiltViewModel()
 
     val visibleItemsMiddle = visibleItemsCount / 2
-    val listScrollCount = values.size
-    val listStartIndex = 0
 
-    fun getItem(index: Int) = values[index]
+    val blankItemsList = List(visibleItemsMiddle) { "" }
+    val preparedItems = remember { mutableStateListOf<String>() }
+
+    preparedItems.addAll(blankItemsList)
+    preparedItems.addAll(items)
+    preparedItems.addAll(blankItemsList)
+
+    val listScrollCount = preparedItems.size
+
+    fun getItem(index: Int) = preparedItems[index]
+
+    val listStartIndex = if (startIndex == -1) listScrollCount / 2 else startIndex
 
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = listStartIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
-    val selectedItem = pickerViewModel.selectedItem
+    val itemHeightPixels = remember { mutableIntStateOf(0) }
+    val itemHeightDp = pixelsToDp(itemHeightPixels.intValue)
 
     LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }.map { index -> getItem(index + visibleItemsMiddle) }
-            .distinctUntilChanged().collect { item -> pickerViewModel.updateSelectedItem(item) }
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .map { index ->
+                getItem(
+                    index
+                            + visibleItemsMiddle
+                )
+            }
+            .distinctUntilChanged()
+            .collect { item ->
+                onSelect(item)
+            }
     }
 
-    LazyColumn(
-        state = listState,
-        flingBehavior = flingBehavior,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(118.dp)
-    ) {
-        items(listScrollCount) { index ->
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = if (getItem(index) == selectedItem.value) Modifier
-                    .background(
-                        color = RedBg, shape = RoundedCornerShape(8.dp)
-                    )
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp) else Modifier
-                    .background(
-                        color = White
-                    )
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
+    Box(modifier = Modifier.padding(vertical = 7.dp)) {
+        LazyColumn(
+            state = listState,
+            flingBehavior = flingBehavior,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(itemHeightDp * visibleItemsCount)
+                .background(color = White)
+        ) {
+            items(listScrollCount) { index ->
                 Text(
                     text = getItem(index),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = getTextStyle(
-                        index = index, items = values, selectedItem = selectedItem.value
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        lineHeight = 24.sp
                     ),
-                    color = if (getItem(index) == selectedItem.value) BlackMain else GreySubText
+                    color = BlackMain,
+                    modifier = Modifier
+                        .onSizeChanged { size -> itemHeightPixels.intValue = size.height }
                 )
             }
         }
-    }
-}
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(itemHeightDp * visibleItemsCount)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(White, Color.Transparent, White),
+                    )
+                )
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(itemHeightDp + 4.dp)
+                .offset(y = itemHeightDp * visibleItemsMiddle - 2.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(RedMain.copy(alpha = 0.06f))
 
-@Composable
-private fun getTextStyle(index: Int, items: List<String>, selectedItem: String): TextStyle {
-
-    return when {
-        items[index] == selectedItem -> {
-            MaterialTheme.typography.labelLarge
-        }
-
-        (index == items.size - 1 && items[0] == selectedItem) || (index == 0 && items[items.size - 1] == selectedItem) -> {
-            MaterialTheme.typography.labelMedium
-        }
-
-        (index != items.size - 1 && items[index + 1] == selectedItem) || (index != 0 && items[index - 1] == selectedItem) -> {
-            MaterialTheme.typography.labelMedium
-        }
-
-        else -> {
-            MaterialTheme.typography.bodySmall
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PickerPreview() {
-    HeartRateAppTheme {
-        val values = remember { (1..99).map { it.toString() } }
-        Picker(
-            values = values,
-            visibleItemsCount = 5,
         )
     }
 }
+
+@Composable
+private fun pixelsToDp(pixels: Int) = with(LocalDensity.current) { pixels.toDp() }

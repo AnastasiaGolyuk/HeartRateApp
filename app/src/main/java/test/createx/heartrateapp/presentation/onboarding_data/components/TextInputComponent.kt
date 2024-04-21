@@ -1,35 +1,112 @@
 package test.createx.heartrateapp.presentation.onboarding_data.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import test.createx.heartrateapp.R
 import test.createx.heartrateapp.ui.theme.GreySubText
 import test.createx.heartrateapp.ui.theme.RedAction
-import test.createx.heartrateapp.ui.theme.White
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextInputComponent() {
-    TextField(
-        placeholder = { Text(text = "Your name") },
-        value = "",
-        onValueChange = { },
-        modifier = Modifier.fillMaxWidth(),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = RedAction,
-            containerColor = White,
-            placeholderColor = GreySubText,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent),
-        textStyle = MaterialTheme.typography.titleSmall,
-        shape = RoundedCornerShape(10.dp)
-    )
+fun TextInputComponent(
+    onInput: (String) -> Unit,
+    text: String,
+    onToggleVisibility: () -> Unit = {},
+    containerColor: Color
+) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+
+    var isError by remember {
+        mutableStateOf(false)
+    }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+
+        TextField(
+            placeholder = { Text(text = stringResource(R.string.name_placeholder)) },
+            value = text,
+            onValueChange = {
+                onInput(it)
+                isError = if (isValidText(it)) {
+                    false
+                } else {
+                    it.isNotEmpty()
+                }
+            },
+            trailingIcon = {
+                if (isError) {
+                    Icon(
+                        painter = painterResource(R.drawable.trailing_icon_error),
+                        contentDescription = stringResource(R.string.error_icon_description),
+                        tint = RedAction
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                    onToggleVisibility()
+                }
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+            colors = TextFieldDefaults.colors(
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedContainerColor = containerColor,
+                focusedContainerColor = containerColor,
+                errorContainerColor = containerColor,
+                unfocusedPlaceholderColor = GreySubText,
+                focusedPlaceholderColor = GreySubText,
+                unfocusedTextColor = RedAction,
+                focusedTextColor = RedAction,
+                errorTextColor = RedAction
+            ),
+            textStyle = MaterialTheme.typography.titleSmall,
+            shape = RoundedCornerShape(10.dp),
+        )
+        Text(
+            text = stringResource(R.string.input_error_message),
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .alpha(if (isError) 1f else 0f),
+            style = MaterialTheme.typography.labelSmall,
+            color = RedAction
+        )
+    }
+}
+
+private fun isValidText(text: String): Boolean {
+    return text.matches(Regex("[a-zA-Z0-9]+"))
 }

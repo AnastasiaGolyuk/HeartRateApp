@@ -1,3 +1,194 @@
 <resources>
     <string name="app_name">HeartRateApp</string>
+
+    <string name="normal_low_rate_hint">Your heart rate is Low. Apart from being a highly trained athlete, a slow heart rate is usually caused by an underlying issue. Work with your doctor or another healthcare practitioner to find and treat the cause.</string>
+    <string name="normal_normal_rate_hint">Your heart rate is Normal. A typical heart rate in this state is for adults is 60–100 bpm. You can prevent out of normal by doing the following: regular exercise, reducing stress, maintaining a healthy weight, and eating healthy.</string>
+    <string name="normal_high_rate_hint">Your heart rate is High. Take a walk outside, ideally in nature. Relaxation exercises such as controlled breathing, meditation. To prevent this condition, practice yoga and stretching.</string>
+    <string name="exercise_low_rate_hint">Your heart rate is Low. You should adjust your training plan to be more effective. Work with your doctor or another healthcare practitioner to find and treat the cause.</string>
+    <string name="exercise_normal_rate_hint">Your heart rate is Normal. You can prevent out of normal by doing the following: regular exercise, reducing stress, maintaining a healthy weight, and eating healthy.</string>
+    <string name="exercise_high_rate_hint">Your heart rate is High. It\'s advisable to should slow down or stop exercising and discuss it further with your physician or cardiologist. This may be a sign of serious illness.</string>
+
+    <string name="empty_reports_title">"Here you can see your reports.\nTry your first measurement."</string>
+    <string name="empty_statistics_title">"Here you can view your statistics.\nTry the first measurement."</string>
+
+    <string name="squats_workout_title">Squats</string>
+    <string name="squats_workout_description">1. Stand with feet shoulder-width apart and hands clasped in front of chest, elbows slightly bent.\n2. Brace abs, push hips back, and bend knees, lowering body into a squat. Pause at the bottom, then push back up to the starting position.</string>
+    <string name="plank_workout_title">Forearm Plank</string>
+    <string name="plank_workout_description">1. Lie face down with your legs extended, elbows bent directly under your shoulders, and your palms flat on the floor.\n2. Engage your abs, press the floor away from yourself with your forearms. You should form a straight line from shoulders to heels.</string>
+    <string name="rope_workout_title">Jump Rope</string>
+    <string name="rope_workout_description">Swing the rope over your head and jump as it passes your feet. You don\'t have to jump high, just enough to clear the rope. Land evenly on the balls of both feet.</string>
+    <string name="step_workout_title">Step-Ups</string>
+    <string name="step_workout_description">To begin, stand behind your platform. Place one foot on top of the surface, pressing into your heel as you step up. Bring your other foot up to meet the first on top of the platform. Return your second foot to the floor, followed by the first.</string>
+    <string name="biceps_workout_title">Biceps Curl</string>
+    <string name="biceps_workout_description">1. Stand with your feet shoulder-width apart and a dumbbell in each hand.\n2. Turn your arms to face forward and bend your elbows to move the dumbbells up toward your shoulders. Slowly raise both dumbbells up, after slowly lower the dumbbells.</string>
+
+    <string name="empty_statistics_button_text">Go to measurement</string>
+    <string name="bpm_title">bpm</string>
+    <string name="average_measurement_title">Average measurement</string>
+    <string name="lowest_rate_title">Lowest rate</string>
+    <string name="normal_rate_title">Normal rate</string>
+    <string name="highest_rate_title">Highest rate</string>
+    <string name="popular_state_title">Your popular state</string>
+    <string name="popular_state_percentage_title">Mostly</string>
+    <string name="user_state_icon_description">User state icon</string>
+    <string name="heart_icon_description">Heart icon</string>
+    <string name="workout_image_description">Workout image</string>
+    <string name="back_button_animation_label">backButtonAnimation</string>
+    <string name="return_alert_dialog_title">Return to the previous exercise?</string>
+    <string name="return_alert_dialog_button_text">Return</string>
+    <string name="stop_alert_dialog_title">Stop the workout?</string>
+    <string name="stop_alert_dialog_text">Progress will be reset, all workout will begin again</string>
+    <string name="stop_alert_dialog_button_text">Stop</string>
+    <string name="go_back_icon_description">Go back</string>
+    <string name="workout_timer_text">sec to complete</string>
+    <string name="start_exercise_text">Start exercise</string>
+    <string name="next_exercise_text">Next exercise</string>
+    <string name="workout_intro_image_description">Workout intro image</string>
+    <string name="workout_intro_title">Get some exercise</string>
+    <string name="workout_intro_description">The heart is a muscle which becomes more efficient with exercise.  When you exercise, your muscles help to circulate blood through the body taking some of the strain and effort off the heart. In addition, exercising regularly can help ensure normal blood pressure and blood flow.</string>
+    <string name="workout_intro_subscription_details_text">Only 5 exercises per day</string>
+    <string name="workout_intro_button_text">Start workout</string>
+    <string name="top_app_bar_navigation_icon_description">Top app bar navigation icon</string>
+    <string name="settings_profile_details_title">Profile details</string>
+    <string name="settings_contact_us_title">Contact us</string>
+    <string name="settings_review_title">Review</string>
+    <string name="privacy_policy_title">Privacy policy</string>
+    <string name="terms_of_use_title">Terms of use</string>
+    <string name="report_alert_dialog_title">Go back without saving?</string>
+    <string name="report_alert_dialog_text">Your changed data will not be saved</string>
+    <string name="report_alert_dialog_button_text">Go back</string>
+    <string name="report_name_input_title">Name</string>
+    <string name="report_sex_input_title">Sex</string>
+    <string name="report_age_input_title">Age</string>
+    <string name="report_lifestyle_input_title">Lifestyle</string>
+    <string name="report_weight_input_title">Weight</string>
+    <string name="report_height_input_title">Height</string>
+    <string name="save_changes_button_title">Save changes</string>
+    <string name="add_icon_description">Add</string>
+    <string name="measurements_heart_image_description">Measurements heart image</string>
+    <string name="close_icon_description">Close</string>
+    <string name="billing_restore_button_text">Restore</string>
+    <string name="background_wave_image_description">Background wave</string>
+    <string name="billing_title">Use 100% All the functionality of the App</string>
+    <string name="billing_trial_info_text">"Free 3 days trial, then $7.99/Week"</string>
+    <string name="get_started_button_text">Get started</string>
+    <string name="continue_button_text">Continue</string>
+    <string name="heart_statistics_title">Heart statistics</string>
+    <string name="heart_statistics_description">A simple way to monitor your health is to measure your heart rate anytime, anywhere.</string>
+    <string name="health_suggestions_title">Health suggestions</string>
+    <string name="health_suggestions_description">Get useful tips for your health. Now you won\'t miss anything important.</string>
+    <string name="heart_rate_history_title">Heart rate history</string>
+    <string name="heart_rate_history_description">Get health trend graphs and view health reports.</string>
+    <string name="benefit_icon_description">Benefit icon</string>
+    <string name="bottom_nav_bar_icon_description">Bottom nav bar icon</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="empty_data_image_description">Empty data image</string>
+    <string name="hint_intro_text">Relax, don\'t control your breathing. Press the button to start the measurement</string>
+    <string name="hint_first_text">Relax your hand and fingers, don\'t control your breathing</string>
+    <string name="hint_second_text">We recommend taking measurements daily to get a more complete picture of your condition</string>
+    <string name="hint_measurements_text">Put your finger on the camera lens and flash at the same time and continue measuring</string>
+    <string name="bottom_sheet_hint_title">How to measure your heart rate?</string>
+    <string name="bottom_sheet_hint_description">Put your finger on the camera lens and flash at the same time and hold it still until the measurement is complete</string>
+    <string name="bpm_initial_title">--</string>
+    <string name="measurement_time_text">Measurement time:</string>
+    <string name="start_measurement_button_text">Start measurement</string>
+    <string name="normal_state_title">Normal</string>
+    <string name="resting_state_title">Resting</string>
+    <string name="walking_state_title">Walking</string>
+    <string name="exercise_state_title">Exercise</string>
+    <string name="state_sheet_dialog_title">Choose your current state</string>
+    <string name="state_sheet_dialog_description">This will help us to make correct recommendations on the resulting measurement</string>
+    <string name="create_report_button_text">Create Report</string>
+    <string name="measurements_alert_dialog_title">Close the measurement?</string>
+    <string name="measurements_alert_dialog_description">The measured data will not be saved</string>
+    <string name="hint_content_animation_label">hintContentAnimation</string>
+    <string name="hint_image_description">Hint image</string>
+    <string name="measurement_time_left_text">%1$s seconds left</string>
+    <string name="measurement_time_init_text">Just %1$s seconds</string>
+    <string name="low_rate_title">Low rate</string>
+    <string name="high_rate_title">High rate</string>
+    <string name="statistics_screen_title">My statistics</string>
+    <string name="workout_screen_title">Workout</string>
+    <string name="heart_rate_screen_title">Heart rate</string>
+    <string name="reports_screen_title">My reports</string>
+    <string name="settings_screen_title">Settings</string>
+    <string name="profile_details_screen_title">Profile details</string>
+    <string name="heart_rate_measurement_title">Heart rate measurement</string>
+    <string name="heart_rate_measurement_description">Easy way to monitor your health-measure heart rate anytime and anywhere</string>
+    <string name="measurements_and_mood_statistics_title">Measurements and mood statistics</string>
+    <string name="measurements_and_mood_statistics_description">Get graphs on the dynamics of your health. Now you won’t miss anything important!</string>
+
+    <string name="welcome_title">Welcome</string>
+    <string name="welcome_subtitle">What\'s your name?</string>
+    <string name="welcome_description">We\'d be happy to meet you!</string>
+
+    <string name="hey_title">Hey!</string>
+    <string name="hey_subtitle">What is your sex?</string>
+    <string name="hey_description">This would be factored into the measurements</string>
+
+    <string name="thanks_title">Thanks</string>
+    <string name="thanks_subtitle">How old are you?</string>
+    <string name="thanks_description">This is necessary for accurate measurements</string>
+
+    <string name="good_title">Good</string>
+    <string name="good_subtitle">Add your parameters</string>
+    <string name="good_description">This will provide more accurate readings</string>
+
+    <string name="last_title">And the last</string>
+    <string name="last_subtitle">Choose your lifestyle</string>
+    <string name="last_description">This will help us tailor a workout program for you</string>
+    <string name="skip_button_text">Skip</string>
+    <string name="name_placeholder">Your name</string>
+    <string name="error_icon_description">Error icon</string>
+    <string name="input_error_message">Please use standard characters only - no symbols</string>
+    <string name="units_button_title">Units</string>
+    <string name="drop_down_icon_description">Drop down icon</string>
+
+    <string name="button_icon_description">Button icon</string>
+    <string name="save_result_button_text">Save result</string>
+    <string name="rate_report_alert_dialog_title">Close the measurement?</string>
+    <string name="rate_report_alert_dialog_description">The measured data will not be saved</string>
+
+    <string-array name="pronouns_array">
+        <item>She / Her</item>
+        <item>He / Him</item>
+        <item>They / Them</item>
+    </string-array>
+
+    <string-array name="age_array">
+        <item>Less than 20</item>
+        <item>20–29</item>
+        <item>30–39</item>
+        <item>40–49</item>
+        <item>50–59</item>
+        <item>More than 60</item>
+    </string-array>
+
+    <string-array name="lifestyle_array">
+        <item>Active</item>
+        <item>Moderate</item>
+        <item>Sedentary</item>
+    </string-array>
+
+    <string-array name="units_array">
+        <item>kg, cm</item>
+        <item>lb, ft</item>
+    </string-array>
+
+    <string-array name="periods_array">
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+
+    <string-array name="week_days_array">
+        <item>Mo</item>
+        <item>Tu</item>
+        <item>We</item>
+        <item>Th</item>
+        <item>Fr</item>
+        <item>St</item>
+        <item>Su</item>
+    </string-array>
+
+
 </resources>
